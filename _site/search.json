@@ -1,0 +1,240 @@
+[
+  {
+    "objectID": "resources.html",
+    "href": "resources.html",
+    "title": "Resources & Blog",
+    "section": "",
+    "text": "Stay informed with articles, tips, and industry insights."
+  },
+  {
+    "objectID": "resources.html#career-advice",
+    "href": "resources.html#career-advice",
+    "title": "Resources & Blog",
+    "section": "Career Advice",
+    "text": "Career Advice\nExplore advice on resume building, interview preparation, and more."
+  },
+  {
+    "objectID": "resources.html#industry-trends",
+    "href": "resources.html#industry-trends",
+    "title": "Resources & Blog",
+    "section": "Industry Trends",
+    "text": "Industry Trends\nKeep up-to-date on trends and emerging skills in the job market."
+  },
+  {
+    "objectID": "resources.html#user-generated-content",
+    "href": "resources.html#user-generated-content",
+    "title": "Resources & Blog",
+    "section": "User-Generated Content",
+    "text": "User-Generated Content\nRead stories and advice shared by other users."
+  },
+  {
+    "objectID": "skill_development.html",
+    "href": "skill_development.html",
+    "title": "Skill Development",
+    "section": "",
+    "text": "Build and enhance skills for your desired career path."
+  },
+  {
+    "objectID": "skill_development.html#skills-library",
+    "href": "skill_development.html#skills-library",
+    "title": "Skill Development",
+    "section": "Skills Library",
+    "text": "Skills Library\nAccess a categorized list of skills essential for various careers. - Skills Library"
+  },
+  {
+    "objectID": "skill_development.html#learning-resources",
+    "href": "skill_development.html#learning-resources",
+    "title": "Skill Development",
+    "section": "Learning Resources",
+    "text": "Learning Resources\nCourseera Data Science Course\nLinkedin Data Science Course\nDatacamp Data Science Course"
+  },
+  {
+    "objectID": "skill_development.html#skill-gap-analysis",
+    "href": "skill_development.html#skill-gap-analysis",
+    "title": "Skill Development",
+    "section": "Skill Gap Analysis",
+    "text": "Skill Gap Analysis\nCompare your current skills with those needed in your chosen fields.\n\n\nQuestion text here\n\nChoice 1 Choice 2 Choice 3 Choice 4"
+  },
+  {
+    "objectID": "mentorship_networking.html",
+    "href": "mentorship_networking.html",
+    "title": "Mentorship & Networking",
+    "section": "",
+    "text": "Connect with mentors and build a professional network."
+  },
+  {
+    "objectID": "mentorship_networking.html#mentorship-program",
+    "href": "mentorship_networking.html#mentorship-program",
+    "title": "Mentorship & Networking",
+    "section": "Mentorship Program",
+    "text": "Mentorship Program\nPair up with mentors for personalized guidance."
+  },
+  {
+    "objectID": "mentorship_networking.html#community-forums",
+    "href": "mentorship_networking.html#community-forums",
+    "title": "Mentorship & Networking",
+    "section": "Community Forums",
+    "text": "Community Forums\nEngage in discussions, ask questions, and share resources."
+  },
+  {
+    "objectID": "mentorship_networking.html#webinars-and-events",
+    "href": "mentorship_networking.html#webinars-and-events",
+    "title": "Mentorship & Networking",
+    "section": "Webinars and Events",
+    "text": "Webinars and Events\nFind and attend career-related webinars and networking events."
+  },
+  {
+    "objectID": "career_exploration.html",
+    "href": "career_exploration.html",
+    "title": "Career Exploration",
+    "section": "",
+    "text": "Discover a variety of career paths, view job descriptions, salary insights, and career growth opportunities.\n\nData Related Job Lists Personality Test Data Science Roadmaps"
+  },
+  {
+    "objectID": "career_exploration.html#career-library",
+    "href": "career_exploration.html#career-library",
+    "title": "Career Exploration",
+    "section": "Career Library",
+    "text": "Career Library\nFind detailed information on various careers, including duties, required skills, and education paths. Data Related Job Lists"
+  },
+  {
+    "objectID": "career_exploration.html#personality-skill-assessments",
+    "href": "career_exploration.html#personality-skill-assessments",
+    "title": "Career Exploration",
+    "section": "Personality & Skill Assessments",
+    "text": "Personality & Skill Assessments\nTake interactive quizzes to identify career paths aligned with your strengths and interests. Personality Test"
+  },
+  {
+    "objectID": "career_exploration.html#career-roadmaps",
+    "href": "career_exploration.html#career-roadmaps",
+    "title": "Career Exploration",
+    "section": "Career Roadmaps",
+    "text": "Career Roadmaps\nVisual roadmaps that guide you through steps to achieve specific career goals. Data Science Roadmaps"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Data Science Career Navigator",
+    "section": "",
+    "text": "Explore your career journey with personalized guidance, resources, and tools to reach your professional goals."
+  },
+  {
+    "objectID": "index.html#explore-key-sections",
+    "href": "index.html#explore-key-sections",
+    "title": "Data Science Career Navigator",
+    "section": "Explore Key Sections",
+    "text": "Explore Key Sections\n\nCareer Exploration Skill Development Job Search Hub Resources & Blog Career Advisor"
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "About this site"
+  },
+  {
+    "objectID": "job_search.html",
+    "href": "job_search.html",
+    "title": "Job Search Hub",
+    "section": "",
+    "text": "Explore job opportunities and stay organized with tools and tips."
+  },
+  {
+    "objectID": "job_search.html#job-listings",
+    "href": "job_search.html#job-listings",
+    "title": "Job Search Hub",
+    "section": "Job Listings",
+    "text": "Job Listings\nData Science Job Listing"
+  },
+  {
+    "objectID": "job_search.html#company-profiles",
+    "href": "job_search.html#company-profiles",
+    "title": "Job Search Hub",
+    "section": "Company Profiles",
+    "text": "Company Profiles\nLearn about potential employers, their values, and employee experiences."
+  },
+  {
+    "objectID": "job_search.html#application-tracker",
+    "href": "job_search.html#application-tracker",
+    "title": "Job Search Hub",
+    "section": "Application Tracker",
+    "text": "Application Tracker\nKeep track of job applications with reminders and updates."
+  },
+  {
+    "objectID": "career_advisor.html",
+    "href": "career_advisor.html",
+    "title": "Career Advisor",
+    "section": "",
+    "text": "Follow this interactive tool to get personalized career advice based on your preferences.\n\n\n\nLet’s start with your preferences!"
+  },
+  {
+    "objectID": "personality_test.html",
+    "href": "personality_test.html",
+    "title": "Personality Test",
+    "section": "",
+    "text": "Take this personality test to discover your strengths and whether you might be a good fit for data-related jobs.\n\n\nLet’s get to know your strengths!"
+  },
+  {
+    "objectID": "DS_Roadmap.html",
+    "href": "DS_Roadmap.html",
+    "title": "Data Career Path Roadmap",
+    "section": "",
+    "text": "This roadmap outlines the progression for different data-related careers from beginner to leadership levels.\n\nData Analyst\n\nLevel 1: Beginner - Basic SQL, Excel, Simple Visualizations\nLevel 2: Intermediate - Advanced SQL, R/Python, Intermediate Machine Learning\nLevel 3: Advanced - Complex data models, Predictive analytics\nLevel 4: Expert - Data-driven business strategy\nLevel 5: Leader - Leadership in analytics initiatives\n\n\n\nData Engineer\n\nLevel 1: Beginner - Basic database knowledge, ETL tools\nLevel 2: Intermediate - Advanced database management, Data warehousing\nLevel 3: Advanced - Cloud services, Big data technologies\nLevel 4: Expert - Architecting scalable data solutions\nLevel 5: Leader - Strategy for data infrastructure\n\n\n\nMachine Learning Engineer\n\nLevel 1: Beginner - Basic ML algorithms, Python/R\nLevel 2: Intermediate - Advanced ML models, Feature engineering\nLevel 3: Advanced - Deep learning, Model optimization\nLevel 4: Expert - ML deployment, Automated ML systems\nLevel 5: Leader - ML strategy and innovation\n\n\n\nData Scientist\n\nLevel 1: Beginner - Statistical analysis, R/Python\nLevel 2: Intermediate - Machine learning, Data wrangling\nLevel 3: Advanced - Deep learning, AI technologies\nLevel 4: Expert - Advanced predictive modeling\nLevel 5: Leader - Leading data science research and development\n\n\n\nAI Specialist\n\nLevel 1: Beginner - Basic AI concepts, Programming\nLevel 2: Intermediate - Neural networks, TensorFlow/Keras\nLevel 3: Advanced - Reinforcement learning, AI optimization\nLevel 4: Expert - AI system integration\nLevel 5: Leader - AI strategy and ethical AI leadership\n\n\n\nBI Developer\n\nLevel 1: Beginner - Report creation, Basic data analysis\nLevel 2: Intermediate - Complex reporting, Dashboards\nLevel 3: Advanced - Data mining, BI software expertise\nLevel 4: Expert - Advanced analytics and visualization\nLevel 5: Leader - BI strategy and management"
+  },
+  {
+    "objectID": "index.html#welcome-to-career-navigator",
+    "href": "index.html#welcome-to-career-navigator",
+    "title": "Data Science Career Navigator",
+    "section": "",
+    "text": "Explore your career journey with personalized guidance, resources, and tools to reach your professional goals."
+  },
+  {
+    "objectID": "job_search.html#networking-resources",
+    "href": "job_search.html#networking-resources",
+    "title": "Job Search Hub",
+    "section": "Networking Resources",
+    "text": "Networking Resources\nNetworking Options and Opportunities"
+  },
+  {
+    "objectID": "networking.html",
+    "href": "networking.html",
+    "title": "Networking Opportunities",
+    "section": "",
+    "text": "Pair up with mentors for personalized guidance."
+  },
+  {
+    "objectID": "networking.html#mentorship-program",
+    "href": "networking.html#mentorship-program",
+    "title": "Networking Opportunities",
+    "section": "Mentorship Program",
+    "text": "Mentorship Program\nPair up with mentors for personalized guidance."
+  },
+  {
+    "objectID": "networking.html#community-forums",
+    "href": "networking.html#community-forums",
+    "title": "Networking Opportunities",
+    "section": "Community Forums",
+    "text": "Community Forums\nEngage in discussions, ask questions, and share resources."
+  },
+  {
+    "objectID": "networking.html#webinars-and-events",
+    "href": "networking.html#webinars-and-events",
+    "title": "Networking Opportunities",
+    "section": "Webinars and Events",
+    "text": "Webinars and Events\nFind and attend career-related webinars and networking events."
+  },
+  {
+    "objectID": "networking.html#mentorship-programs",
+    "href": "networking.html#mentorship-programs",
+    "title": "Networking Opportunities",
+    "section": "",
+    "text": "Pair up with mentors for personalized guidance."
+  },
+  {
+    "objectID": "career_exploration.html#explore-career-resources",
+    "href": "career_exploration.html#explore-career-resources",
+    "title": "Career Exploration",
+    "section": "",
+    "text": "Discover a variety of career paths, view job descriptions, salary insights, and career growth opportunities.\n\nData Related Job Lists Personality Test Data Science Roadmaps"
+  }
+]

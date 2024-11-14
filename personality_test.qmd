@@ -1,0 +1,14 @@
+---
+title: "Personality Test"
+---
+
+
+Take this personality test to discover your strengths and whether you might be a good fit for data-related jobs.
+
+<div id="test-container">
+  <h3 id="question-text">Let's get to know your strengths!</h3>
+  <div id="options"></div>
+  <div id="result" style="display:none;"></div>
+</div>
+
+<script src="personality_test.js"></script>

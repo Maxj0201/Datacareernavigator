@@ -1,0 +1,23 @@
+---
+title: "Data Science Career Navigator"
+---
+
+
+## Welcome to Career Navigator!
+
+Explore your career journey with personalized guidance, resources, and tools to reach your professional goals.
+
+
+<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrJT34P6-jcRxLEiv-MOnZTAkUv-M-zIXkug&s" alt="Career Exploration" class="large-image" />
+
+
+## Explore Key Sections
+```{=html}
+<div class="sections-grid">
+  <a href="career_exploration.qmd" class="section-card">Career Exploration</a>
+  <a href="skill_development.qmd" class="section-card">Skill Development</a>
+  <a href="job_search.qmd" class="section-card">Job Search Hub</a>
+  <a href="resources.qmd" class="section-card">Resources & Blog</a>
+  <a href="career_advisor.qmd" class="section-card">Career Advisor</a>
+</div>
+

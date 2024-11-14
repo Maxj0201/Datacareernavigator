@@ -1,0 +1,14 @@
+---
+title: "Career Exploration"
+---
+
+## Explore Career Resources
+
+Discover a variety of career paths, view job descriptions, salary insights, and career growth opportunities.
+
+```{=html}
+<div class="explore-grid">
+  <a href="https://builtin.com/data-science/data-science-jobs" class="explore-card" target="_blank">Data Related Job Lists</a>
+  <a href="personality_test.qmd" class="explore-card">Personality Test</a>
+  <a href="DS_Roadmap.qmd" class="explore-card">Data Science Roadmaps</a>
+</div>

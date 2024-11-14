@@ -1,0 +1,19 @@
+---
+title: "Career Advisor"
+---
+
+
+Follow this interactive tool to get personalized career advice based on your preferences.
+
+<div id="advisor-container">
+  <!-- The question will display here -->
+  <h3 id="question-text">Let's start with your preferences!</h3>
+
+  <!-- Answer options will be buttons for each choice -->
+  <div id="options"></div>
+
+  <!-- Final advice result -->
+  <div id="result" style="display:none;"></div>
+</div>
+
+<script src="career_advisor.js"></script>

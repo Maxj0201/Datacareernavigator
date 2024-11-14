@@ -1,0 +1,44 @@
+---
+title: "Skills Library for Data Scientists"
+---
+
+
+Explore the essential skills required for a successful career in data science. These are organized by categories and skill levels.
+
+## Programming and Coding
+
+- **Beginner**: Basic Python, R, SQL, Data Visualization (e.g., Matplotlib, ggplot)
+- **Intermediate**: Advanced Python (e.g., Pandas, NumPy), Shell Scripting, Database Management (SQL), Data Wrangling
+- **Advanced**: Functional Programming, Object-Oriented Programming, Big Data Tools (Hadoop, Spark)
+
+## Mathematics and Statistics
+
+- **Beginner**: Descriptive Statistics, Probability Basics
+- **Intermediate**: Inferential Statistics, Hypothesis Testing, A/B Testing
+- **Advanced**: Bayesian Statistics, Time Series Analysis, Multivariate Calculus
+
+## Machine Learning
+
+- **Beginner**: Linear Regression, Decision Trees, K-Means Clustering
+- **Intermediate**: Support Vector Machines, Ensemble Methods (Random Forest, Gradient Boosting), Neural Networks (Basic)
+- **Advanced**: Deep Learning (CNNs, RNNs), Transfer Learning, Reinforcement Learning
+
+## Data Manipulation and Analysis
+
+- **Beginner**: Data Cleaning, Data Transformation
+- **Intermediate**: Feature Engineering, Data Aggregation
+- **Advanced**: Dimensionality Reduction, Data Imputation Techniques
+
+## Data Visualization and Reporting
+
+- **Beginner**: Basic Charts (Bar, Line, Pie), Excel
+- **Intermediate**: Interactive Dashboards (Tableau, Power BI), Plotly
+- **Advanced**: Custom Visualization with D3.js, Geospatial Visualization
+
+## Business Knowledge
+
+- **Beginner**: Understanding of Key Business Metrics
+- **Intermediate**: Industry-Specific Analysis, Reporting Skills
+- **Advanced**: Strategic Data Science, Communicating Results to Stakeholders
+
+Each of these skill categories provides a roadmap to help you progress from beginner to advanced level. Focus on developing skills at each level before moving on to the next.

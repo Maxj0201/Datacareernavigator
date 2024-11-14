@@ -1,0 +1,15 @@
+---
+title: "Job Search Hub"
+---
+
+
+Explore job opportunities and stay organized with tools and tips.
+
+## Job Listings
+[Data Science Job Listing](https://www.indeed.com/q-data-scientist-jobs.html?vjk=ec56c87b0db6b0c1&&aceid=&gad_source=1&gbraid=0AAAAADgc-H7neoSY816sz2s3Cu3K6TADV&gclid=CjwKCAiAudG5BhAREiwAWMlSjBCRtI8qkLp6vQ10WfeeVlTopw219Zuzvl7HQJkLfNoYQf-ERZDmShoCOnsQAvD_BwE&gclsrc=aw.ds)
+
+## Company Profiles
+Learn about potential employers, their values, and employee experiences.
+
+## Networking Resources
+[Networking Options and Opportunities](networking.qmd)

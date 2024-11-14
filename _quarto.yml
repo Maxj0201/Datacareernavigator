@@ -1,0 +1,34 @@
+project:
+  type: website
+  output-dir: _site
+
+
+website:
+  title: "Career Navigator"
+  navbar:
+    right:
+      - text: "Career Exploration"
+        href: career_exploration.qmd
+      - text: "Skill Development"
+        href: skill_development.qmd
+      - text: "Job Search Hub"
+        href: job_search.qmd
+      - text: "Resources & Blog"
+        href: resources.qmd
+      - text: "Career Advisor"
+        href: career_advisor.qmd
+
+  
+
+format:
+  html:
+    theme: 
+      light: lux
+      dark: cyborg
+    css: styles.css  # Custom CSS for additional styling
+    toc: true  # Enable Table of Contents
+    
+
+
+
+
