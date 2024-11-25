@@ -6,6 +6,9 @@ title: "Career Exploration"
 
 Discover a variety of career paths, view job descriptions, salary insights, and career growth opportunities.
 
+
+<img src="https://s3.amazonaws.com/libapps/accounts/69534/images/HCD.jpg" alt="Career Exploration" class="large-image" />
+
 ```{=html}
 <div class="explore-grid">
   <a href="https://builtin.com/data-science/data-science-jobs" class="explore-card" target="_blank">Data Related Job Lists</a>

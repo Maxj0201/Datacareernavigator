@@ -3,7 +3,9 @@ title: "Career Advisor"
 ---
 
 
-Follow this interactive tool to get personalized career advice based on your preferences.
+Follow this interactive tool to get personalized career advice based on your preferences. This career advisor will give you a general advice on overall careers!
+
+<img src="https://media.licdn.com/dms/image/D4D12AQFmYNszYdipwg/article-cover_image-shrink_720_1280/0/1684215751586?e=2147483647&v=beta&t=7Wcmqhclj7cBITszMr2D4tmRdGfJcrMaNqIOIKGR980" alt="Career Exploration" class="large-image" />
 
 <div id="advisor-container">
   <!-- The question will display here -->

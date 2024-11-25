@@ -1,16 +1,44 @@
 ---
-title: "Resources & Blog"
+title: "Resources & News"
 ---
 
-
-
 Stay informed with articles, tips, and industry insights.
+
+
+<img src="https://aprika.com/wp-content/uploads/2022/02/Resource-Management.jpeg" alt="Career Exploration" class="large-image" />
+
 
 ## Career Advice
 Explore advice on resume building, interview preparation, and more.
 
-## Industry Trends
-Keep up-to-date on trends and emerging skills in the job market.
+<div class="sections-grid">
+  <a href="https://towardsdatascience.com/my-honest-advice-for-someone-who-wants-to-become-a-data-scientist-1ecc018fb0b2" class="section-card">Advice for Incoming Data Scientists</a>
+  <a href="https://www.datacamp.com/blog/tips-to-build-your-data-scientist-resume" class="section-card">Resume Building Tips for Data Scientists</a>
+</div>
 
-## User-Generated Content
-Read stories and advice shared by other users.
+
+
+## Industry News and Updates
+Keep up-to-date on trends, news, and emerging skills in the industry and job market.
+
+[News and Trends](https://aibusiness.com/data/data-science)
+
+### Blogs
+```{=html}
+<div class="sections-grid">
+  <a href="https://www.datasciencecentral.com" class="section-card">
+    <img src="https://media.licdn.com/dms/image/v2/C4D0BAQHXfS5hYh2a0A/company-logo_200_200/company-logo_200_200/0/1630579348929/data_science_central_logo?e=2147483647&v=beta&t=2185wl7Dqt43qaYAhLZW4qPCc_GjYtTDXPZ7s9kPofA" alt="Data Science Central">
+    <span></span>
+  </a>
+  <a href="https://datafloq.com" class="section-card">
+    <img src="https://eco-cdn.iqpc.com/eco/images/partners/NLdjSEoch0XCouK1quvLyX0AvGH2xZrfYmuzUml2.png" alt="NVIDIA Careers">
+    <span></span>
+  </a>
+  <a href="https://www.smartdatacollective.com" class="section-card">
+    <img src="https://www.smartdatacollective.com/wp-content/uploads/2017/05/SmartData-Collective.png" alt="Google Careers">
+    <span></span>
+  </a>
+</div>
+
+
+

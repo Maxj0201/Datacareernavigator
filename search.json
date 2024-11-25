@@ -25,14 +25,14 @@
     "href": "job_search.html#company-profiles",
     "title": "Job Search Hub",
     "section": "Company Profiles",
-    "text": "Company Profiles\nLearn about potential employers, their values, and employee experiences."
+    "text": "Company Profiles\nLearn about potential employers, their values, and employee experiences.\n\nExplore Top Employers in Industry"
   },
   {
     "objectID": "job_search.html#networking-resources",
     "href": "job_search.html#networking-resources",
     "title": "Job Search Hub",
     "section": "Networking Resources",
-    "text": "Networking Resources\nNetworking Options and Opportunities"
+    "text": "Networking Resources\n\nNetworking Options and Opportunities"
   },
   {
     "objectID": "DS_Roadmap.html",
@@ -49,46 +49,32 @@
     "text": "About this site"
   },
   {
-    "objectID": "networking.html",
-    "href": "networking.html",
+    "objectID": "networking.html#networking-practives-and-resources",
+    "href": "networking.html#networking-practives-and-resources",
     "title": "Networking Opportunities",
-    "section": "",
-    "text": "Pair up with mentors for personalized guidance."
-  },
-  {
-    "objectID": "networking.html#mentorship-programs",
-    "href": "networking.html#mentorship-programs",
-    "title": "Networking Opportunities",
-    "section": "",
-    "text": "Pair up with mentors for personalized guidance."
-  },
-  {
-    "objectID": "networking.html#community-forums",
-    "href": "networking.html#community-forums",
-    "title": "Networking Opportunities",
-    "section": "Community Forums",
-    "text": "Community Forums\nEngage in discussions, ask questions, and share resources."
+    "section": "Networking Practives and Resources",
+    "text": "Networking Practives and Resources\nShare guides and strategies to improve networking skills, whether online or in person.\nHow to Network as a Data Scientist?\nNetworking Tips for Data Scientist"
   },
   {
     "objectID": "networking.html#webinars-and-events",
     "href": "networking.html#webinars-and-events",
     "title": "Networking Opportunities",
     "section": "Webinars and Events",
-    "text": "Webinars and Events\nFind and attend career-related webinars and networking events."
+    "text": "Webinars and Events\nFind and attend career-related webinars and networking events.\n\nData Science Events"
   },
   {
     "objectID": "career_exploration.html",
     "href": "career_exploration.html",
     "title": "Career Exploration",
     "section": "",
-    "text": "Discover a variety of career paths, view job descriptions, salary insights, and career growth opportunities.\n\nData Related Job Lists Personality Test Data Science Roadmaps"
+    "text": "Discover a variety of career paths, view job descriptions, salary insights, and career growth opportunities.\n\n\nData Related Job Lists Personality Test Data Science Roadmaps"
   },
   {
     "objectID": "career_exploration.html#explore-career-resources",
     "href": "career_exploration.html#explore-career-resources",
     "title": "Career Exploration",
     "section": "",
-    "text": "Discover a variety of career paths, view job descriptions, salary insights, and career growth opportunities.\n\nData Related Job Lists Personality Test Data Science Roadmaps"
+    "text": "Discover a variety of career paths, view job descriptions, salary insights, and career growth opportunities.\n\n\nData Related Job Lists Personality Test Data Science Roadmaps"
   },
   {
     "objectID": "index.html",
@@ -112,11 +98,18 @@
     "text": "Explore Key Sections\n\nCareer Exploration Skill Development Job Search Hub Resources & Blog Career Advisor"
   },
   {
+    "objectID": "index.html#website-user-guide",
+    "href": "index.html#website-user-guide",
+    "title": "Data Science Career Navigator",
+    "section": "Website User Guide",
+    "text": "Website User Guide\nWelcome to the Data Science Career Navigator! This platform is your ultimate companion for exploring, planning, and advancing your journey in the field of data science. Whether you’re just starting or looking to refine your skills, this guide will help you make the most of the resources and tools available here.\n\nExplore Career Paths\nStart your journey on the Career Exploration page, where you’ll find an array of data-related career options. Get a snapshot of what professionals in data science do, and dive into detailed job descriptions, salary insights, and career growth opportunities. To refine your interests, take the Personality Test to discover roles best suited to your strengths and preferences.\n\n\nBuild Your Skills\nHead over to the Skill Development section to explore technical skills essential for a successful data science career. You’ll find curated online resources, tutorials, and guides to help you build expertise in programming, analytics, and machine learning. To assess your current skill level, take the Skill Set Analysis Quiz and identify areas for improvement.\n\n\nSearch for Jobs and Networking Opportunities\nNavigate to the Job Search Hub to access up-to-date listings for data-related job openings and internships from trusted external sites. This section also includes resources to help you grow your professional network and stay informed about upcoming events, webinars, and conferences in the field.\n\n\nUtilize Resources and Industry Insights\nIn the Resources section, you’ll find valuable professional advice and insights into industry trends. From career roadmaps and resume tips to networking strategies and interview preparation, this section is designed to help you stay ahead in the competitive landscape of data science.\n\n\nInteractive Career Navigator Tool\nFinally, explore the Career Navigator tool, an interactive feature that provides tailored career suggestions based on your skills, interests, and goals. This tool is your personalized guide to charting a successful path in data science.\nThis website is more than just a guide—it’s a toolkit for building a rewarding career. Take full advantage of the features, explore at your own pace, and make your data science aspirations a reality. Let’s navigate your future together!"
+  },
+  {
     "objectID": "career_advisor.html",
     "href": "career_advisor.html",
     "title": "Career Advisor",
     "section": "",
-    "text": "Follow this interactive tool to get personalized career advice based on your preferences.\n\n\n\nLet’s start with your preferences!"
+    "text": "Follow this interactive tool to get personalized career advice based on your preferences. This career advisor will give you a general advice on overall careers!\n\n\n\n\nLet’s start with your preferences!"
   },
   {
     "objectID": "skill_development.html",
@@ -149,29 +142,22 @@
   {
     "objectID": "resources.html",
     "href": "resources.html",
-    "title": "Resources & Blog",
+    "title": "Resources & News",
     "section": "",
     "text": "Stay informed with articles, tips, and industry insights."
   },
   {
     "objectID": "resources.html#career-advice",
     "href": "resources.html#career-advice",
-    "title": "Resources & Blog",
+    "title": "Resources & News",
     "section": "Career Advice",
-    "text": "Career Advice\nExplore advice on resume building, interview preparation, and more."
+    "text": "Career Advice\nExplore advice on resume building, interview preparation, and more.\n\nAdvice for Incoming Data Scientists Resume Building Tips for Data Scientists"
   },
   {
-    "objectID": "resources.html#industry-trends",
-    "href": "resources.html#industry-trends",
-    "title": "Resources & Blog",
-    "section": "Industry Trends",
-    "text": "Industry Trends\nKeep up-to-date on trends and emerging skills in the job market."
-  },
-  {
-    "objectID": "resources.html#user-generated-content",
-    "href": "resources.html#user-generated-content",
-    "title": "Resources & Blog",
-    "section": "User-Generated Content",
-    "text": "User-Generated Content\nRead stories and advice shared by other users."
+    "objectID": "resources.html#industry-news-and-updates",
+    "href": "resources.html#industry-news-and-updates",
+    "title": "Resources & News",
+    "section": "Industry News and Updates",
+    "text": "Industry News and Updates\nKeep up-to-date on trends, news, and emerging skills in the industry and job market.\nNews and Trends\n\nBlogs"
   }
 ]

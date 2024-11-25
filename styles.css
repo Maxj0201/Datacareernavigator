@@ -250,3 +250,86 @@ body {
   transform: scale(1.05); /* Slightly enlarge on hover */
 }
 
+
+.sections-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  padding: 20px;
+}
+
+.section-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: #333;
+  background-color: #f9f9f9;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+  text-align: center;
+}
+
+.section-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  background-color: #f1f1f1;
+}
+
+.section-card img {
+  width: 100px; /* Adjust size as needed */
+  height: auto;
+  margin-bottom: 10px;
+  border-radius: 8px;
+}
+
+.section-card span {
+  font-weight: bold;
+  margin-top: 5px;
+}
+
+
+/* General Reset */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+/* Container to handle page structure */
+#container {
+  display: flex;
+  flex-direction: column; /* Stack content vertically */
+  min-height: 100vh; /* Ensure it spans the full viewport height */
+}
+
+/* Main content area */
+#content {
+  flex: 1; /* Push footer to the bottom */
+}
+
+/* Footer styles */
+#footer {
+  color: #5b5858; /* Footer text color */
+  text-align: center; /* Center-align the text */
+  padding: 20px 10px; /* Space around the footer text */
+  box-shadow: 0 -1px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow at the top */
+  width: 100%; /* Make it span the full width */
+  font-size: 10px;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-around; /* Distribute items evenly */
+  flex-wrap: wrap; /* Allow wrapping for smaller screens */
+  gap: 10px; /* Space between items */
+}
+
+.footer-content p {
+  margin: 0; /* Remove extra margin */
+  flex: 1; /* Let items grow/shrink equally */
+  min-width: 200px; /* Ensure content has a reasonable minimum width */
+  text-align: center; /* Center text */
+}

@@ -2,12 +2,20 @@
 title: "Networking Opportunities"
 ---
 
+<img src="https://www.premiumbeat.com/blog/wp-content/uploads/2013/01/Networking.jpg" alt="Career Exploration" class="large-image" />
 
-## Mentorship Programs
-Pair up with mentors for personalized guidance.
 
-## Community Forums
-Engage in discussions, ask questions, and share resources.
+## Networking Practives and Resources
+Share guides and strategies to improve networking skills, whether online or in person.
+
+
+[How to Network as a Data Scientist?](https://towardsdatascience.com/how-to-network-as-a-data-scientist-12fd3ed8d176#:~:text=The%20main%20takeaway%20is%20to,also%20went%20to%20your%20university)
+
+[Networking Tips for Data Scientist](https://www.linkedin.com/advice/3/heres-how-you-can-effectively-network-within-your-1yn2f?utm_source=rss&utm_campaign=collaborative_articles_all_en)
 
 ## Webinars and Events
 Find and attend career-related webinars and networking events.
+```{=html}
+<div class="sections-grid">
+  <a href="https://www.eventbrite.com/d/ga--atlanta/data-science/" class="section-card">Data Science Events</a>
+</div>

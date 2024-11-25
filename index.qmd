@@ -21,3 +21,24 @@ Explore your career journey with personalized guidance, resources, and tools to 
   <a href="career_advisor.qmd" class="section-card">Career Advisor</a>
 </div>
 
+
+## Website User Guide
+
+Welcome to the Data Science Career Navigator! This platform is your ultimate companion for exploring, planning, and advancing your journey in the field of data science. Whether you’re just starting or looking to refine your skills, this guide will help you make the most of the resources and tools available here.
+
+#### Explore Career Paths
+Start your journey on the Career Exploration page, where you’ll find an array of data-related career options. Get a snapshot of what professionals in data science do, and dive into detailed job descriptions, salary insights, and career growth opportunities. To refine your interests, take the Personality Test to discover roles best suited to your strengths and preferences.
+
+#### Build Your Skills
+Head over to the Skill Development section to explore technical skills essential for a successful data science career. You’ll find curated online resources, tutorials, and guides to help you build expertise in programming, analytics, and machine learning. To assess your current skill level, take the Skill Set Analysis Quiz and identify areas for improvement.
+
+#### Search for Jobs and Networking Opportunities
+Navigate to the Job Search Hub to access up-to-date listings for data-related job openings and internships from trusted external sites. This section also includes resources to help you grow your professional network and stay informed about upcoming events, webinars, and conferences in the field.
+
+#### Utilize Resources and Industry Insights
+In the Resources section, you’ll find valuable professional advice and insights into industry trends. From career roadmaps and resume tips to networking strategies and interview preparation, this section is designed to help you stay ahead in the competitive landscape of data science.
+
+#### Interactive Career Navigator Tool
+Finally, explore the Career Navigator tool, an interactive feature that provides tailored career suggestions based on your skills, interests, and goals. This tool is your personalized guide to charting a successful path in data science.
+
+This website is more than just a guide—it’s a toolkit for building a rewarding career. Take full advantage of the features, explore at your own pace, and make your data science aspirations a reality. Let’s navigate your future together!

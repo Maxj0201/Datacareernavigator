@@ -29,7 +29,9 @@ format:
       dark: cyborg
     css: styles.css  # Custom CSS for additional styling
     toc: true  # Enable Table of Contents
+    margin-footer: footer.html
     
+
 
 
 
