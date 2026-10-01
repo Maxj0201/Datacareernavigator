@@ -1,4 +1,4 @@
-# Data Career Navigator
+# Data Pathfinder
 
 A free, interactive guide for students and career-switchers exploring data careers.
 

@@ -4,7 +4,7 @@ import Icon from "../components/Icon.astro";
 import { u } from "../lib/url.ts";
 
 interface Props { title?: string; description?: string }
-const SITE_NAME = "Data Career Navigator";
+const SITE_NAME = "Data Pathfinder";
 const { title, description = "Find the data career that fits you. Take a free career quiz and skill check, explore eight data roles, and get a personal learning roadmap." } = Astro.props;
 const pageTitle = title ? `${title} · ${SITE_NAME}` : `${SITE_NAME}: find your data career`;
 const canonical = new URL(Astro.url.pathname, Astro.site);
