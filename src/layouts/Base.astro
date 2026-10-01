@@ -11,6 +11,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
 const path = Astro.url.pathname.replace(/\/$/, "");
 
 const NAV = [
+  { href: "about", label: "About" },
   { href: "quiz", label: "Quiz" },
   { href: "skills", label: "Skill check" },
   { href: "roles", label: "Roles" },
@@ -18,7 +19,6 @@ const NAV = [
   { href: "roadmap", label: "Roadmap" },
   { href: "resources", label: "Resources" },
   { href: "jobs", label: "Jobs" },
-  { href: "about", label: "About" },
 ];
 const isCurrent = (href: string) => path === u(href) || path.startsWith(u(href) + "/");
 ---
