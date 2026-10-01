@@ -1,0 +1,172 @@
+---
+import Base from "../layouts/Base.astro";
+import Icon from "../components/Icon.astro";
+import { u } from "../lib/url.ts";
+---
+<Base title="Your results" description="Your best-fit data roles, readiness and skill gaps.">
+  <section class="page-head">
+    <div class="container">
+      <p class="eyebrow">Your results</p>
+      <h1 id="res-title">Your best-fit data roles</h1>
+      <p class="lead" id="res-lead">Ranked by how well each role matches what you enjoy. Readiness shows how close your current skills are.</p>
+    </div>
+  </section>
+
+  <div class="container" id="results-app" data-base={u()}>
+    <div class="card empty" id="res-empty" hidden>
+      <h2>No quiz answers yet</h2>
+      <p class="muted">Take the 12-question career quiz to see which roles fit you.</p>
+      <a class="btn btn-primary" href={u("quiz")}>Take the career quiz</a>
+    </div>
+
+    <div id="res-body" hidden>
+      <div class="callout no-print" id="skills-nudge" hidden style="margin-bottom:24px">
+        Add your skills to see readiness and gaps for each role. <a href={u("skills")}>Do the 3-minute skill check →</a>
+      </div>
+
+      <div class="grid grid-3" id="top-matches"></div>
+
+      <section class="section-tight">
+        <div class="split">
+          <div class="card" id="chart-card" hidden>
+            <h2 style="font-size:1.25rem" id="chart-title">Your skills vs. your top match</h2>
+            <div id="chart"></div>
+            <div class="legend"><span class="l-you">Your ratings</span><span class="l-target" id="legend-target">Role target</span></div>
+          </div>
+          <div class="card">
+            <h2 style="font-size:1.25rem">All roles</h2>
+            <div class="table-wrap" style="box-shadow:none;border:0">
+              <table>
+                <thead><tr><th>Role</th><th>Fit</th><th id="ready-th">Ready</th></tr></thead>
+                <tbody id="all-roles"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="row no-print" style="margin-top:8px">
+        <button class="btn btn-secondary" id="copy-link" type="button"><Icon name="link" size={18} /> Copy share link</button>
+        <button class="btn btn-secondary" type="button" onclick="window.print()"><Icon name="print" size={18} /> Print / save as PDF</button>
+        <a class="btn btn-ghost" href={u("quiz")}>Retake quiz</a>
+      </div>
+    </div>
+  </div>
+</Base>
+
+<script>
+  import { DIMENSIONS, type Dimension } from "../data/roles.ts";
+  import { SKILLS, SKILL_BY_ID } from "../data/skills.ts";
+  import { load, save } from "../lib/state.ts";
+  import {
+    interestProfile, rankRoles, skillGaps, topReasons,
+    decodeAnswers, decodeSkills, encodeAnswers, encodeSkills,
+  } from "../lib/scoring.ts";
+  import { radarSvg } from "../lib/radar.ts";
+
+  const app = document.getElementById("results-app")!;
+  const base = app.dataset.base!;
+  const params = new URLSearchParams(location.search);
+  const stored = load();
+  // A link is "shared" only if it carries answers that differ from this browser's own saved state.
+  const sharedQ = params.get("q");
+  const sharedS = params.get("s");
+  const shared = (!!sharedQ && (!stored.answers || encodeAnswers(stored.answers) !== sharedQ))
+    || (!!sharedS && (!stored.skills || encodeSkills(stored.skills) !== sharedS));
+  const answers = decodeAnswers(params.get("q")) ?? (shared ? null : stored.answers ?? null);
+  const skills = decodeSkills(params.get("s")) ?? (shared ? null : stored.skills ?? null);
+  const hasSkills = !!skills && Object.keys(skills).length > 0;
+  const hasAnswers = !!answers && answers.some((a) => a != null);
+
+  const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]!);
+  const dimLabel = (d: Dimension) => DIMENSIONS.find((x) => x.id === d)!.label.toLowerCase();
+  const readyBadge = (n: number) => `<span class="badge ${n >= 75 ? "badge-good" : n >= 45 ? "badge-warn" : "badge-bad"}">${n}% ready</span>`;
+
+  if (!hasAnswers && !hasSkills) {
+    document.getElementById("res-empty")!.hidden = false;
+  } else {
+    document.getElementById("res-body")!.hidden = false;
+    if (shared) document.getElementById("res-title")!.textContent = "Shared results";
+
+    const profile = interestProfile(answers ?? []);
+    let ranked = rankRoles(profile, hasSkills ? skills : null);
+    if (!hasAnswers) {
+      // Skills only: rank by readiness instead.
+      ranked = [...ranked].sort((a, b) => (b.ready ?? 0) - (a.ready ?? 0));
+      document.getElementById("res-lead")!.textContent = "Ranked by readiness, since there are no quiz answers. Take the quiz to add interest fit.";
+    }
+    if (!hasSkills) {
+      document.getElementById("skills-nudge")!.hidden = false;
+      document.getElementById("ready-th")!.textContent = "";
+    }
+
+    // Top 3 cards
+    document.getElementById("top-matches")!.innerHTML = ranked.slice(0, 3).map((m, i) => {
+      const reasons = hasAnswers ? topReasons(profile, m.role, 3) : [];
+      const list = reasons.map(dimLabel);
+      const joined = list.length > 1 ? `${list.slice(0, -1).join(", ")} and ${list[list.length - 1]}` : list[0];
+      const why = reasons.length
+        ? `<p class="small"><strong>Why:</strong> this role leans on ${joined}, all things your answers favour.</p>`
+        : "";
+      const gaps = hasSkills ? skillGaps(skills!, m.role).slice(0, 3) : [];
+      const gapHtml = hasSkills
+        ? gaps.length
+          ? `<p class="small" style="margin-bottom:6px"><strong>Biggest gaps:</strong></p><ul class="chips">${gaps.map((g) => `<li><span class="chip">${esc(SKILL_BY_ID[g.skill].name)} ${g.current}→${g.target}</span></li>`).join("")}</ul>`
+          : `<p class="small"><strong>No skill gaps.</strong> You meet every target for this role.</p>`
+        : "";
+      return `<article class="card match ${i === 0 ? "match-top" : ""}">
+        <div class="row" style="justify-content:space-between">
+          <span class="match-rank">#${i + 1} match</span>
+          ${m.ready != null ? readyBadge(m.ready) : ""}
+        </div>
+        <div><h3 style="font-size:1.35rem">${esc(m.role.title)}</h3><p class="muted small" style="margin:0">${esc(m.role.tagline)}</p></div>
+        ${hasAnswers ? `<div class="score">${m.fit}<small> / 100 fit</small></div>` : ""}
+        ${why}${gapHtml}
+        <div class="row no-print">
+          <a class="btn btn-primary btn-sm" href="${base}roles/${m.role.slug}">Explore role</a>
+          <button class="btn btn-secondary btn-sm" type="button" data-target="${m.role.slug}">Set as my target</button>
+        </div>
+      </article>`;
+    }).join("");
+
+    // All roles table
+    document.getElementById("all-roles")!.innerHTML = ranked.map((m) => `<tr>
+      <td><a href="${base}roles/${m.role.slug}">${esc(m.role.title)}</a></td>
+      <td>${hasAnswers ? `${m.fit}` : "–"}</td>
+      <td>${m.ready != null ? `${m.ready}%` : ""}</td></tr>`).join("");
+
+    // Radar vs top match
+    if (hasSkills) {
+      const top = ranked[0].role;
+      document.getElementById("chart-card")!.hidden = false;
+      document.getElementById("chart-title")!.textContent = `Your skills vs. ${top.title}`;
+      document.getElementById("legend-target")!.textContent = `${top.title} target`;
+      document.getElementById("chart")!.innerHTML = radarSvg(
+        SKILLS.map((s) => s.short),
+        [
+          { label: `${top.title} target`, values: SKILLS.map((s) => top.skills[s.id] ?? 0), className: "radar-target" },
+          { label: "Your ratings", values: SKILLS.map((s) => skills![s.id] ?? 0), className: "radar-you" },
+        ],
+      );
+    }
+
+    app.addEventListener("click", (e) => {
+      const slug = (e.target as HTMLElement).closest<HTMLElement>("[data-target]")?.dataset.target;
+      if (!slug) return;
+      save({ target: slug });
+      location.href = `${base}roadmap`;
+    });
+
+    document.getElementById("copy-link")!.addEventListener("click", async () => {
+      const qs = new URLSearchParams();
+      if (hasAnswers) qs.set("q", encodeAnswers(answers!));
+      if (hasSkills) qs.set("s", encodeSkills(skills!));
+      const link = `${location.origin}${location.pathname}?${qs}`;
+      const toast = document.getElementById("toast")!;
+      try { await navigator.clipboard.writeText(link); toast.textContent = "Link copied"; }
+      catch { toast.textContent = link; }
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 2200);
+    });
+  }
+</script>

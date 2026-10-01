@@ -1,0 +1,119 @@
+---
+import "../styles/global.css";
+import Icon from "../components/Icon.astro";
+import { u } from "../lib/url.ts";
+
+interface Props { title?: string; description?: string }
+const SITE_NAME = "Data Career Navigator";
+const { title, description = "Find the data career that fits you. Take a free career quiz and skill check, explore eight data roles, and get a personal learning roadmap." } = Astro.props;
+const pageTitle = title ? `${title} · ${SITE_NAME}` : `${SITE_NAME}: find your data career`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const path = Astro.url.pathname.replace(/\/$/, "");
+
+const NAV = [
+  { href: "quiz", label: "Career quiz" },
+  { href: "skills", label: "Skill check" },
+  { href: "roles", label: "Roles" },
+  { href: "compare", label: "Compare" },
+  { href: "roadmap", label: "Roadmap" },
+  { href: "resources", label: "Resources" },
+  { href: "about", label: "About" },
+];
+const isCurrent = (href: string) => path === u(href) || path.startsWith(u(href) + "/");
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href={u("favicon.svg")} type="image/svg+xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={SITE_NAME} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={new URL(u("og-image.png"), Astro.site)} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="theme-color" content="#4353d6" />
+    <link rel="sitemap" href={u("sitemap-index.xml")} />
+    <script is:inline>
+      // Apply the saved theme before first paint to avoid a flash.
+      try { const t = localStorage.getItem("dcn:theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <div class="container">
+        <a class="brand" href={u()}>
+          <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="var(--accent)"/><path d="M9 22 14.5 9.5l3 7 2.5-4.5L23 22" fill="none" stroke="var(--on-accent)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span>{SITE_NAME}</span>
+        </a>
+        <button class="icon-btn menu-btn" id="menu-btn" aria-expanded="false" aria-controls="site-nav" aria-label="Open menu"><Icon name="menu" /></button>
+        <nav class="nav" id="site-nav" aria-label="Main">
+          {NAV.map((n) => <a href={u(n.href)} aria-current={isCurrent(n.href) ? "page" : undefined}>{n.label}</a>)}
+          <button class="icon-btn theme-btn" id="theme-btn" aria-label="Toggle dark mode" title="Toggle dark mode">
+            <span class="i-moon"><Icon name="moon" size={18} /></span><span class="i-sun"><Icon name="sun" size={18} /></span>
+          </button>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <div>
+          <a class="brand" href={u()}>
+            <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="var(--accent)"/><path d="M9 22 14.5 9.5l3 7 2.5-4.5L23 22" fill="none" stroke="var(--on-accent)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span>{SITE_NAME}</span>
+          </a>
+          <p class="muted small" style="margin-top:12px;max-width:42ch">A free guide for students and career-switchers exploring data careers. Your answers stay in your own browser.</p>
+        </div>
+        <div>
+          <h4>Tools</h4>
+          <ul class="stack" style="--gap:6px">
+            <li><a href={u("quiz")}>Career quiz</a></li>
+            <li><a href={u("skills")}>Skill check</a></li>
+            <li><a href={u("knowledge-check")}>Knowledge check</a></li>
+            <li><a href={u("compare")}>Compare roles</a></li>
+            <li><a href={u("roadmap")}>My roadmap</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Site</h4>
+          <ul class="stack">
+            <li><a href={u("roles")}>All roles</a></li>
+            <li><a href={u("resources")}>Resources</a></li>
+            <li><a href={u("about")}>About & methodology</a></li>
+            <li><a href={u("archive/")}>Original 2024 site</a></li>
+          </ul>
+        </div>
+        <p class="footer-note">Built by Max Jiang. Pay figures are U.S. Bureau of Labor Statistics May 2025 medians; links to third-party resources are not endorsements. Guidance here is educational, not a guarantee of employment outcomes.</p>
+      </div>
+    </footer>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <script>
+      const menuBtn = document.getElementById("menu-btn")!;
+      const nav = document.getElementById("site-nav")!;
+      menuBtn.addEventListener("click", () => {
+        const open = nav.classList.toggle("open");
+        menuBtn.setAttribute("aria-expanded", String(open));
+        menuBtn.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+      });
+      document.getElementById("theme-btn")!.addEventListener("click", () => {
+        const root = document.documentElement;
+        const current = root.dataset.theme ?? (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+        const next = current === "dark" ? "light" : "dark";
+        root.dataset.theme = next;
+        try { localStorage.setItem("dcn:theme", next); } catch {}
+      });
+    </script>
+  </body>
+</html>

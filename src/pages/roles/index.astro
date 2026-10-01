@@ -1,0 +1,34 @@
+---
+import Base from "../../layouts/Base.astro";
+import { ROLES } from "../../data/roles.ts";
+import { SKILL_BY_ID } from "../../data/skills.ts";
+import { u } from "../../lib/url.ts";
+
+const money = (n: number) => `$${Math.round(n / 1000)}k`;
+const topSkills = (r: (typeof ROLES)[number]) =>
+  Object.entries(r.skills).sort((a, b) => (b[1] ?? 0) - (a[1] ?? 0)).slice(0, 4).map(([id]) => SKILL_BY_ID[id as keyof typeof SKILL_BY_ID].short);
+---
+<Base title="Data roles" description="What eight data roles actually do: day-to-day work, skills, tools, entry paths, interview topics and pay.">
+  <section class="page-head">
+    <div class="container">
+      <p class="eyebrow">Roles</p>
+      <h1>Eight data roles, explained</h1>
+      <p class="lead">What each job is really like, which skills matter most and how people get in. Titles vary between companies, so read the description, not just the name.</p>
+    </div>
+  </section>
+  <section class="section-tight">
+    <div class="container grid grid-2">
+      {ROLES.map((r) => (
+        <a class="card card-link" href={u(`roles/${r.slug}`)}>
+          <div class="row" style="justify-content:space-between;align-items:start">
+            <h2 style="font-size:1.3rem;margin:0">{r.title}</h2>
+            <span class="badge badge-accent" title={r.bls.exact ? r.bls.occupation : `Closest BLS category: ${r.bls.occupation}`}>{money(r.bls.median)} median{r.bls.exact ? "" : "*"}</span>
+          </div>
+          <p class="muted" style="margin:10px 0 14px">{r.tagline}</p>
+          <ul class="chips">{topSkills(r).map((s) => <li><span class="chip">{s}</span></li>)}</ul>
+        </a>
+      ))}
+    </div>
+    <div class="container"><p class="muted small" style="margin-top:20px">Pay: U.S. Bureau of Labor Statistics, May 2025 median annual wage. *BLS has no category for this exact title, so the closest occupation is shown (details on each role page).</p></div>
+  </section>
+</Base>

@@ -1,0 +1,121 @@
+---
+import Base from "../layouts/Base.astro";
+import { KNOWLEDGE } from "../data/knowledge.ts";
+import { u } from "../lib/url.ts";
+---
+<Base title="Knowledge check" description="Ten quick data science concept questions with instant feedback and explanations.">
+  <section class="page-head">
+    <div class="container quiz">
+      <p class="eyebrow">Knowledge check</p>
+      <h1>Test your data fundamentals</h1>
+      <p class="lead">{KNOWLEDGE.length} quick concept questions across Python, statistics and machine learning. You'll see the answer and an explanation after each one.</p>
+    </div>
+  </section>
+
+  <section class="section-tight">
+    <div class="container quiz" id="kc-app">
+      <div id="kc-quiz">
+        <div class="progress-label"><span id="kc-count"></span><span id="kc-score"></span></div>
+        <div class="meter"><span id="kc-meter" style="width:0%"></span></div>
+        <p class="eyebrow" style="margin-top:24px" id="kc-topic"></p>
+        <h2 class="question" style="margin-top:0" id="kc-prompt" tabindex="-1"></h2>
+        <div class="options" id="kc-options"></div>
+        <div class="explain" id="kc-explain" hidden aria-live="polite"></div>
+        <div class="quiz-nav"><span></span><button class="btn btn-primary" id="kc-next" type="button" hidden>Next →</button></div>
+      </div>
+      <div class="card" id="kc-result" hidden>
+        <h2 id="kc-final"></h2>
+        <p class="muted" id="kc-msg"></p>
+        <div class="stack" id="kc-topics" style="margin:20px 0"></div>
+        <div class="row">
+          <button class="btn btn-primary" id="kc-retry" type="button">Try again</button>
+          <a class="btn btn-secondary" href={u("skills")}>Rate your skills</a>
+          <a class="btn btn-ghost" href={u("resources")}>Browse resources</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<script>
+  import { KNOWLEDGE } from "../data/knowledge.ts";
+
+  const $ = (id: string) => document.getElementById(id)!;
+  let index = 0;
+  let results: boolean[] = [];
+
+  function render() {
+    const q = KNOWLEDGE[index];
+    $("kc-count").textContent = `Question ${index + 1} of ${KNOWLEDGE.length}`;
+    $("kc-score").textContent = `${results.filter(Boolean).length} correct`;
+    $("kc-meter").style.width = `${(index / KNOWLEDGE.length) * 100}%`;
+    $("kc-topic").textContent = q.topic;
+    $("kc-prompt").textContent = q.prompt;
+    $("kc-explain").hidden = true;
+    $("kc-next").hidden = true;
+    const opts = $("kc-options");
+    opts.innerHTML = "";
+    q.choices.forEach((choice, i) => {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "option";
+      b.innerHTML = `<span class="key">${"ABCD"[i]}</span><span></span>`;
+      (b.lastElementChild as HTMLElement).textContent = choice;
+      b.addEventListener("click", () => answer(i));
+      opts.appendChild(b);
+    });
+  }
+
+  function answer(i: number) {
+    const q = KNOWLEDGE[index];
+    const correct = i === q.answer;
+    results[index] = correct;
+    const buttons = [...$("kc-options").querySelectorAll<HTMLButtonElement>("button")];
+    buttons.forEach((b, k) => {
+      b.disabled = true;
+      if (k === q.answer) b.classList.add("correct");
+      else if (k === i) b.classList.add("wrong");
+    });
+    const ex = $("kc-explain");
+    ex.innerHTML = `<strong>${correct ? "Correct." : "Not quite."}</strong> `;
+    ex.append(q.explanation);
+    ex.hidden = false;
+    const next = $("kc-next") as HTMLButtonElement;
+    next.textContent = index === KNOWLEDGE.length - 1 ? "See results →" : "Next →";
+    next.hidden = false;
+    next.focus();
+    $("kc-score").textContent = `${results.filter(Boolean).length} correct`;
+  }
+
+  function finish() {
+    const score = results.filter(Boolean).length;
+    $("kc-quiz").hidden = true;
+    $("kc-result").hidden = false;
+    $("kc-final").textContent = `You scored ${score} / ${KNOWLEDGE.length}`;
+    $("kc-msg").textContent = score >= 8
+      ? "Strong fundamentals. Check the skill check to see how they map to specific roles."
+      : score >= 5
+        ? "A solid base with a few gaps. The breakdown below shows which topics to review."
+        : "A good starting point. Start with the free beginner resources for the topics below.";
+    const topics = [...new Set(KNOWLEDGE.map((k) => k.topic))];
+    $("kc-topics").innerHTML = topics.map((t) => {
+      const idx = KNOWLEDGE.map((k, i) => (k.topic === t ? i : -1)).filter((i) => i >= 0);
+      const ok = idx.filter((i) => results[i]).length;
+      return `<div class="meter-row"><span>${t}</span><div class="meter"><span style="width:${(ok / idx.length) * 100}%"></span></div><span class="num">${ok}/${idx.length}</span></div>`;
+    }).join("");
+  }
+
+  $("kc-next").addEventListener("click", () => {
+    if (index === KNOWLEDGE.length - 1) return finish();
+    index++;
+    render();
+    ($("kc-prompt") as HTMLElement).focus();
+  });
+  $("kc-retry").addEventListener("click", () => {
+    index = 0; results = [];
+    $("kc-result").hidden = true;
+    $("kc-quiz").hidden = false;
+    render();
+  });
+  render();
+</script>

@@ -1,0 +1,115 @@
+---
+import Base from "../layouts/Base.astro";
+import Icon from "../components/Icon.astro";
+import { ROLES } from "../data/roles.ts";
+import { u } from "../lib/url.ts";
+---
+<Base title="My roadmap" description="A personal, step-by-step learning checklist built from your skill gaps for your target data role.">
+  <section class="page-head">
+    <div class="container">
+      <p class="eyebrow">Roadmap</p>
+      <h1>Your learning roadmap</h1>
+      <p class="lead">Pick a target role. We'll turn every skill gap into concrete next steps, with free resources first. Tick items off as you go; progress is saved in this browser.</p>
+    </div>
+  </section>
+
+  <section class="section-tight">
+    <div class="container" id="roadmap-app" data-base={u()}>
+      <div class="row no-print" style="margin-bottom:20px">
+        <label class="row" style="gap:10px;font-weight:600">Target role
+          <select id="target">{ROLES.map((r) => <option value={r.slug}>{r.title}</option>)}</select>
+        </label>
+        <button class="btn btn-secondary btn-sm" type="button" onclick="window.print()"><Icon name="print" size={16} /> Print</button>
+      </div>
+
+      <div class="callout no-print" id="no-skills" hidden style="margin-bottom:20px">
+        You haven't rated your skills yet, so this roadmap starts every skill from zero. <a href={u("skills")}>Do the skill check</a> for a personalised plan.
+      </div>
+
+      <div class="card" style="margin-bottom:20px">
+        <div class="row" style="justify-content:space-between">
+          <h2 style="font-size:1.25rem;margin:0" id="rm-title"></h2>
+          <span class="badge badge-accent" id="rm-progress"></span>
+        </div>
+        <div class="meter" style="margin-top:14px"><span id="rm-meter" style="width:0%"></span></div>
+      </div>
+
+      <div class="stack" id="rm-steps"></div>
+      <div class="card empty" id="rm-done" hidden>
+        <h2>You meet every skill target for this role</h2>
+        <p class="muted">Focus on portfolio projects and interview preparation. You'll find both on the role page.</p>
+        <a class="btn btn-primary" id="rm-role-link" href="#">Open the role page</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<script>
+  import { ROLE_BY_SLUG } from "../data/roles.ts";
+  import { SKILL_BY_ID, LEVEL_NAMES } from "../data/skills.ts";
+  import { RESOURCE_BY_ID } from "../data/resources.ts";
+  import { load, save } from "../lib/state.ts";
+  import { skillGaps } from "../lib/scoring.ts";
+
+  const app = document.getElementById("roadmap-app")!;
+  const base = app.dataset.base!;
+  const select = document.getElementById("target") as HTMLSelectElement;
+  const state = load();
+  select.value = state.target && ROLE_BY_SLUG[state.target] ? state.target : "data-analyst";
+  const skills = state.skills ?? {};
+  if (!Object.keys(skills).length) document.getElementById("no-skills")!.hidden = false;
+  let checklist: Record<string, boolean> = state.checklist ?? {};
+
+  const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]!);
+  const costOrder = { Free: 0, Freemium: 1, Paid: 2 } as const;
+
+  function render() {
+    const role = ROLE_BY_SLUG[select.value];
+    save({ target: role.slug });
+    document.getElementById("rm-title")!.textContent = `Path to ${role.title}`;
+    const gaps = skillGaps(skills, role);
+    const steps = document.getElementById("rm-steps")!;
+    document.getElementById("rm-done")!.hidden = gaps.length > 0;
+    (document.getElementById("rm-role-link") as HTMLAnchorElement).href = `${base}roles/${role.slug}`;
+
+    let total = 0, done = 0;
+    steps.innerHTML = gaps.map((g, gi) => {
+      const skill = SKILL_BY_ID[g.skill];
+      const items = [];
+      for (let lvl = g.current; lvl < g.target; lvl++) {
+        const id = `${g.skill}-${lvl}`;
+        total++;
+        if (checklist[id]) done++;
+        items.push(`<label class="check ${checklist[id] ? "done" : ""}">
+          <input type="checkbox" data-item="${id}" ${checklist[id] ? "checked" : ""}>
+          <span><strong>Level ${lvl} → ${lvl + 1}:</strong> ${esc(skill.levelUp[lvl])}</span></label>`);
+      }
+      const res = skill.resources.map((r) => RESOURCE_BY_ID[r]).filter(Boolean)
+        .sort((a, b) => costOrder[a.cost] - costOrder[b.cost]).slice(0, 3);
+      return `<article class="card">
+        <div class="row" style="justify-content:space-between">
+          <h3 style="margin:0"><span class="muted">${gi + 1}.</span> ${esc(skill.name)}</h3>
+          <span class="chip">${LEVEL_NAMES[g.current]} → ${LEVEL_NAMES[g.target]}</span>
+        </div>
+        <p class="muted small" style="margin:6px 0 4px">Goal: ${esc(skill.levels[g.target])}</p>
+        <div>${items.join("")}</div>
+        ${res.length ? `<p class="small" style="margin:12px 0 6px"><strong>Start here:</strong></p><ul class="chips">${res.map((r) => `<li><a class="chip" href="${r.url}" target="_blank" rel="noopener">${esc(r.title)} · ${r.cost}</a></li>`).join("")}</ul>` : ""}
+      </article>`;
+    }).join("");
+
+    const pct = total ? Math.round((done / total) * 100) : 100;
+    document.getElementById("rm-progress")!.textContent = total ? `${done} / ${total} steps · ${pct}%` : "Complete";
+    document.getElementById("rm-meter")!.style.width = `${pct}%`;
+  }
+
+  app.addEventListener("change", (e) => {
+    const box = e.target as HTMLInputElement;
+    if (box.dataset.item) {
+      checklist = { ...checklist, [box.dataset.item]: box.checked };
+      save({ checklist });
+      render();
+    }
+  });
+  select.addEventListener("change", render);
+  render();
+</script>

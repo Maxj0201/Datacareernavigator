@@ -1,0 +1,113 @@
+---
+import Base from "../layouts/Base.astro";
+import { QUIZ } from "../data/quiz.ts";
+import { u } from "../lib/url.ts";
+---
+<Base title="Career quiz" description={`Answer ${QUIZ.length} quick questions about how you like to work and get matched with the data roles that fit you best.`}>
+  <section class="page-head">
+    <div class="container quiz">
+      <p class="eyebrow">Career quiz</p>
+      <h1>Which data role fits you?</h1>
+      <p class="lead">{QUIZ.length} questions about what you enjoy, not what you already know. There are no wrong answers, so pick what feels most like you.</p>
+    </div>
+  </section>
+
+  <section class="section-tight">
+    <div class="container quiz" id="quiz" data-results={u("results")}>
+      <div class="progress-label"><span id="q-count">Question 1 of {QUIZ.length}</span><span id="q-pct">0% complete</span></div>
+      <div class="meter" role="progressbar" aria-valuemin="0" aria-valuemax={QUIZ.length} aria-valuenow="0" id="q-meter"><span style="width:0%"></span></div>
+      <h2 class="question" id="q-prompt" tabindex="-1"></h2>
+      <div class="options" id="q-options" role="group" aria-labelledby="q-prompt"></div>
+      <div class="quiz-nav">
+        <button class="btn btn-ghost" id="q-back" type="button">← Back</button>
+        <div class="row">
+          <button class="btn btn-ghost" id="q-reset" type="button">Start over</button>
+          <button class="btn btn-primary" id="q-next" type="button" disabled>Next →</button>
+        </div>
+      </div>
+      <p class="muted small" style="margin-top:20px">Tip: press <kbd>1</kbd>–<kbd>6</kbd> to choose an answer and <kbd>Enter</kbd> to continue.</p>
+    </div>
+  </section>
+</Base>
+
+<script>
+  import { QUIZ } from "../data/quiz.ts";
+  import { load, save } from "../lib/state.ts";
+  import { encodeAnswers } from "../lib/scoring.ts";
+
+  const root = document.getElementById("quiz")!;
+  const prompt = document.getElementById("q-prompt")!;
+  const options = document.getElementById("q-options")!;
+  const count = document.getElementById("q-count")!;
+  const pct = document.getElementById("q-pct")!;
+  const meter = document.getElementById("q-meter")!;
+  const back = document.getElementById("q-back") as HTMLButtonElement;
+  const next = document.getElementById("q-next") as HTMLButtonElement;
+  const reset = document.getElementById("q-reset") as HTMLButtonElement;
+
+  const saved = load().answers;
+  let answers: (number | null)[] = QUIZ.map((_, i) => saved?.[i] ?? null);
+  let index = Math.max(0, answers.findIndex((a) => a == null));
+  if (answers.every((a) => a != null)) index = QUIZ.length - 1;
+
+  function render(focus = false) {
+    const q = QUIZ[index];
+    const answered = answers.filter((a) => a != null).length;
+    count.textContent = `Question ${index + 1} of ${QUIZ.length}`;
+    pct.textContent = `${Math.round((answered / QUIZ.length) * 100)}% complete`;
+    meter.setAttribute("aria-valuenow", String(answered));
+    (meter.firstElementChild as HTMLElement).style.width = `${(answered / QUIZ.length) * 100}%`;
+    prompt.textContent = q.prompt;
+    options.innerHTML = "";
+    q.options.forEach((o, i) => {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "option";
+      b.setAttribute("aria-pressed", String(answers[index] === i));
+      b.innerHTML = `<span class="key">${i + 1}</span><span></span>`;
+      (b.lastElementChild as HTMLElement).textContent = o.text;
+      b.addEventListener("click", () => choose(i));
+      options.appendChild(b);
+    });
+    back.disabled = index === 0;
+    next.disabled = answers[index] == null;
+    next.textContent = index === QUIZ.length - 1 ? "See my results →" : "Next →";
+    if (focus) prompt.focus();
+  }
+
+  function choose(i: number) {
+    answers[index] = i;
+    save({ answers });
+    render();
+    // Auto-advance after a short pause so the selection is visible.
+    window.setTimeout(() => { if (answers[index] === i && index < QUIZ.length - 1) go(1); }, 260);
+  }
+
+  function go(step: number) {
+    if (step > 0 && answers[index] == null) return;
+    if (step > 0 && index === QUIZ.length - 1) {
+      window.location.href = `${root.dataset.results}?q=${encodeAnswers(answers)}`;
+      return;
+    }
+    index = Math.min(QUIZ.length - 1, Math.max(0, index + step));
+    render(true);
+  }
+
+  back.addEventListener("click", () => go(-1));
+  next.addEventListener("click", () => go(1));
+  reset.addEventListener("click", () => {
+    answers = QUIZ.map(() => null);
+    save({ answers });
+    index = 0;
+    render(true);
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.target instanceof HTMLInputElement || e.metaKey || e.ctrlKey || e.altKey) return;
+    const n = Number(e.key);
+    if (Number.isInteger(n) && n >= 1 && n <= QUIZ[index].options.length) choose(n - 1);
+    else if (e.key === "Enter" && !next.disabled && !(e.target instanceof HTMLButtonElement)) go(1);
+    else if (e.key === "ArrowLeft" && index > 0) go(-1);
+  });
+
+  render();
+</script>

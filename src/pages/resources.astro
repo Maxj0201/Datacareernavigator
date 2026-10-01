@@ -1,0 +1,85 @@
+---
+import Base from "../layouts/Base.astro";
+import { RESOURCES, COMPANY_CAREERS } from "../data/resources.ts";
+import { SKILLS } from "../data/skills.ts";
+
+const types = [...new Set(RESOURCES.map((r) => r.type))].sort();
+---
+<Base title="Resources" description="Curated courses, books, practice sites and communities for data careers, filterable by skill, level and cost.">
+  <section class="page-head">
+    <div class="container">
+      <p class="eyebrow">Resources</p>
+      <h1>Learning resource library</h1>
+      <p class="lead">Hand-picked courses, books, practice sites and communities. Filter by skill, type or cost. Free options are everywhere, so you don't need to pay to start.</p>
+    </div>
+  </section>
+
+  <section class="section-tight">
+    <div class="container" id="res-app">
+      <div class="filters">
+        <label>Search <input type="search" id="f-q" placeholder="e.g. SQL, dbt, interview" /></label>
+        <label>Skill
+          <select id="f-skill"><option value="">All skills</option>{SKILLS.map((s) => <option value={s.id}>{s.name}</option>)}</select>
+        </label>
+        <label>Type
+          <select id="f-type"><option value="">All types</option>{types.map((t) => <option>{t}</option>)}</select>
+        </label>
+        <label>Cost
+          <select id="f-cost"><option value="">Any cost</option><option>Free</option><option>Freemium</option><option>Paid</option></select>
+        </label>
+      </div>
+      <p class="muted small" id="f-count" aria-live="polite"></p>
+      <div class="grid grid-3" id="res-list">
+        {RESOURCES.map((r) => (
+          <a class="card card-link" href={r.url} target="_blank" rel="noopener"
+             data-skills={r.skills.join(" ")} data-type={r.type} data-cost={r.cost}
+             data-text={`${r.title} ${r.provider} ${r.note} ${r.type}`.toLowerCase()}>
+            <div class="row" style="justify-content:space-between;margin-bottom:8px">
+              <span class="chip">{r.type}</span>
+              <span class={`badge ${r.cost === "Free" ? "badge-good" : r.cost === "Freemium" ? "badge-accent" : "badge-warn"}`}>{r.cost}</span>
+            </div>
+            <h3>{r.title}</h3>
+            <p class="muted small" style="margin-bottom:6px">{r.provider} · {r.level}</p>
+            <p class="small">{r.note}</p>
+          </a>
+        ))}
+      </div>
+      <p class="card empty" id="f-empty" hidden>No resources match these filters.</p>
+
+      <div class="card" style="margin-top:32px">
+        <h2 style="font-size:1.2rem">Company career pages</h2>
+        <p class="muted small">Large employers that hire across data roles. Each company's own job site has the most current openings.</p>
+        <ul class="chips">{COMPANY_CAREERS.map((c) => <li><a class="chip" href={c.url} target="_blank" rel="noopener">{c.name} careers ↗</a></li>)}</ul>
+      </div>
+      <p class="muted small" style="margin-top:16px">Links go to third-party sites and aren't endorsements. Prices and availability can change.</p>
+    </div>
+  </section>
+</Base>
+
+<script>
+  const q = document.getElementById("f-q") as HTMLInputElement;
+  const skill = document.getElementById("f-skill") as HTMLSelectElement;
+  const type = document.getElementById("f-type") as HTMLSelectElement;
+  const cost = document.getElementById("f-cost") as HTMLSelectElement;
+  const cards = [...document.querySelectorAll<HTMLElement>("#res-list > a")];
+
+  const params = new URLSearchParams(location.search);
+  if (params.get("skill")) skill.value = params.get("skill")!;
+
+  function apply() {
+    const text = q.value.trim().toLowerCase();
+    let shown = 0;
+    for (const c of cards) {
+      const ok = (!text || c.dataset.text!.includes(text))
+        && (!skill.value || c.dataset.skills!.split(" ").includes(skill.value))
+        && (!type.value || c.dataset.type === type.value)
+        && (!cost.value || c.dataset.cost === cost.value);
+      c.hidden = !ok;
+      if (ok) shown++;
+    }
+    document.getElementById("f-count")!.textContent = `${shown} of ${cards.length} resources`;
+    document.getElementById("f-empty")!.hidden = shown > 0;
+  }
+  [q, skill, type, cost].forEach((el) => el.addEventListener("input", apply));
+  apply();
+</script>

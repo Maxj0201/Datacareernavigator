@@ -1,0 +1,92 @@
+---
+import Base from "../layouts/Base.astro";
+import { ROLES } from "../data/roles.ts";
+import { u } from "../lib/url.ts";
+---
+<Base title="Compare roles" description="Compare two data roles side by side: skills, tools, pay, entry paths and your readiness for each.">
+  <section class="page-head">
+    <div class="container">
+      <p class="eyebrow">Compare</p>
+      <h1>Compare two roles</h1>
+      <p class="lead">See exactly where two roles overlap and where they differ, which is useful when you're choosing between neighbouring paths.</p>
+    </div>
+  </section>
+
+  <section class="section-tight">
+    <div class="container" id="compare-app" data-base={u()}>
+      <div class="filters" style="max-width:640px">
+        <label>Role A <select id="role-a">{ROLES.map((r) => <option value={r.slug}>{r.title}</option>)}</select></label>
+        <label>Role B <select id="role-b">{ROLES.map((r) => <option value={r.slug}>{r.title}</option>)}</select></label>
+      </div>
+      <div class="split">
+        <div class="card">
+          <div id="cmp-chart"></div>
+          <div class="legend"><span class="l-you" id="leg-a"></span><span class="l-target" id="leg-b"></span></div>
+        </div>
+        <div class="card" id="cmp-facts"></div>
+      </div>
+      <div class="table-wrap" style="margin-top:20px">
+        <table>
+          <thead><tr><th>Skill</th><th id="th-a"></th><th id="th-b"></th></tr></thead>
+          <tbody id="cmp-skills"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<script>
+  import { ROLE_BY_SLUG, type Role } from "../data/roles.ts";
+  import { SKILLS } from "../data/skills.ts";
+  import { radarSvg } from "../lib/radar.ts";
+  import { load } from "../lib/state.ts";
+  import { readiness } from "../lib/scoring.ts";
+
+  const app = document.getElementById("compare-app")!;
+  const base = app.dataset.base!;
+  const selA = document.getElementById("role-a") as HTMLSelectElement;
+  const selB = document.getElementById("role-b") as HTMLSelectElement;
+  const params = new URLSearchParams(location.search);
+  selA.value = ROLE_BY_SLUG[params.get("a") ?? ""] ? params.get("a")! : "data-analyst";
+  selB.value = ROLE_BY_SLUG[params.get("b") ?? ""] ? params.get("b")! : "data-scientist";
+  const skills = load().skills;
+  const hasSkills = !!skills && Object.keys(skills).length > 0;
+
+  const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]!);
+  const dots = (n: number, cls: string) => `<span class="dots ${cls}" aria-label="${n} of 4">${[1, 2, 3, 4].map((k) => `<i class="${k <= n ? "on" : ""}"></i>`).join("")}</span>`;
+  const money = (n: number) => `$${n.toLocaleString("en-US")}`;
+
+  function facts(r: Role) {
+    return `<div><h3><a href="${base}roles/${r.slug}">${esc(r.title)}</a></h3>
+      <p class="muted small">${esc(r.tagline)}</p>
+      <p class="small"><strong>Median pay:</strong> ${money(r.bls.median)}${r.bls.exact ? "" : "*"} · <strong>Growth:</strong> ${esc(r.bls.growth.split(" ")[0])}</p>
+      ${hasSkills ? `<p class="small"><strong>Your readiness:</strong> ${readiness(skills!, r)}%</p>` : ""}
+      <p class="small" style="margin-bottom:4px"><strong>Tools:</strong></p>
+      <ul class="chips">${r.tools.slice(0, 5).map((t) => `<li><span class="chip">${esc(t)}</span></li>`).join("")}</ul></div>`;
+  }
+
+  function render() {
+    const a = ROLE_BY_SLUG[selA.value];
+    const b = ROLE_BY_SLUG[selB.value];
+    history.replaceState(null, "", `?a=${a.slug}&b=${b.slug}`);
+    document.getElementById("cmp-chart")!.innerHTML = radarSvg(SKILLS.map((s) => s.short), [
+      { label: b.title, values: SKILLS.map((s) => b.skills[s.id] ?? 0), className: "radar-target" },
+      { label: a.title, values: SKILLS.map((s) => a.skills[s.id] ?? 0), className: "radar-you" },
+    ]);
+    document.getElementById("leg-a")!.textContent = a.title;
+    document.getElementById("leg-b")!.textContent = b.title;
+    document.getElementById("th-a")!.textContent = a.title;
+    document.getElementById("th-b")!.textContent = b.title;
+    document.getElementById("cmp-facts")!.innerHTML =
+      `<div class="grid" style="gap:24px">${facts(a)}${facts(b)}</div>
+       <p class="muted small" style="margin-top:12px">*Closest BLS category. See each role page for the source.</p>`;
+    document.getElementById("cmp-skills")!.innerHTML = SKILLS
+      .filter((s) => (a.skills[s.id] ?? 0) + (b.skills[s.id] ?? 0) > 0)
+      .sort((x, y) => Math.abs((b.skills[y.id] ?? 0) - (a.skills[y.id] ?? 0)) - Math.abs((b.skills[x.id] ?? 0) - (a.skills[x.id] ?? 0)))
+      .map((s) => `<tr><td>${esc(s.name)}</td><td>${dots(a.skills[s.id] ?? 0, "")}</td><td>${dots(b.skills[s.id] ?? 0, "target")}</td></tr>`)
+      .join("");
+  }
+  selA.addEventListener("change", render);
+  selB.addEventListener("change", render);
+  render();
+</script>

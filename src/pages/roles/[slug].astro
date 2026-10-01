@@ -1,0 +1,130 @@
+---
+import Base from "../../layouts/Base.astro";
+import Icon from "../../components/Icon.astro";
+import { ROLES, ROLE_BY_SLUG, type Role } from "../../data/roles.ts";
+import { SKILLS, SKILL_BY_ID, LEVEL_NAMES, type SkillId } from "../../data/skills.ts";
+import { u } from "../../lib/url.ts";
+import { radarSvg } from "../../lib/radar.ts";
+
+export function getStaticPaths() {
+  return ROLES.map((role) => ({ params: { slug: role.slug }, props: { role } }));
+}
+interface Props { role: Role }
+const { role } = Astro.props;
+
+const required = (Object.entries(role.skills) as [SkillId, number][]).sort((a, b) => b[1] - a[1]);
+const chart = radarSvg(
+  SKILLS.map((s) => s.short),
+  [{ label: `${role.title} target`, values: SKILLS.map((s) => role.skills[s.id] ?? 0), className: "radar-target" }],
+);
+const money = (n: number) => `$${n.toLocaleString("en-US")}`;
+---
+<Base title={role.title} description={`${role.title}: ${role.tagline} Day-to-day work, required skills, tools, entry paths, interview topics and pay.`}>
+  <section class="role-hero">
+    <div class="container">
+      <p class="eyebrow"><a href={u("roles")} style="text-decoration:none">Roles</a> / {role.title}</p>
+      <h1>{role.title}</h1>
+      <p class="lead">{role.tagline}</p>
+    </div>
+  </section>
+
+  <section class="section-tight">
+    <div class="container">
+      <div class="key-facts">
+        <div class="fact"><div class="label">Median pay (U.S.)</div><div class="value">{money(role.bls.median)}</div><div class="muted small">{role.bls.exact ? "BLS: " : "Closest BLS category: "}{role.bls.occupation}</div></div>
+        <div class="fact"><div class="label">Projected growth</div><div class="value">{role.bls.growth.split(" ")[0]}</div><div class="muted small">{role.bls.growth.slice(role.bls.growth.indexOf(" ") + 1)}</div></div>
+        <div class="fact"><div class="label">Core skills</div><div class="value" style="font-size:1rem;line-height:1.4">{required.slice(0, 3).map(([id]) => SKILL_BY_ID[id].short).join(" · ")}</div></div>
+        <div class="fact" id="my-readiness"><div class="label">Your readiness</div><div class="value" data-ready>–</div><div class="muted small" data-ready-note><a href={u("skills")}>Rate your skills</a> to see this</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-tight">
+    <div class="container split">
+      <div class="stack">
+        <div class="card">
+          <h2 style="font-size:1.3rem">What the job is</h2>
+          <p>{role.summary}</p>
+          <h3>A typical week</h3>
+          <ul>{role.dayInLife.map((d) => <li>{d}</li>)}</ul>
+          <h3>Common tools</h3>
+          <ul class="chips">{role.tools.map((t) => <li><span class="chip">{t}</span></li>)}</ul>
+        </div>
+
+        <div class="card">
+          <h2 style="font-size:1.3rem">Skills you'll need</h2>
+          <p class="muted small">Target level for a solid early-career hire (0 = none, 4 = expert).</p>
+          <div class="table-wrap" style="box-shadow:none">
+            <table>
+              <thead><tr><th>Skill</th><th>Target</th><th>What that looks like</th></tr></thead>
+              <tbody>
+                {required.map(([id, lvl]) => (
+                  <tr>
+                    <td><strong>{SKILL_BY_ID[id].name}</strong></td>
+                    <td style="white-space:nowrap"><span class="dots target" aria-label={`${lvl} of 4`}>{[1, 2, 3, 4].map((k) => <i class={k <= lvl ? "on" : ""} />)}</span> <span class="muted small">{LEVEL_NAMES[lvl]}</span></td>
+                    <td class="muted small">{SKILL_BY_ID[id].levels[lvl]}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2 style="font-size:1.3rem">How people get in</h2>
+          <ul>{role.entryPaths.map((p) => <li>{p}</li>)}</ul>
+          <h3>Portfolio projects that stand out</h3>
+          <div class="stack">
+            {role.projects.map((p) => (
+              <div><strong>{p.title}.</strong> <span class="muted">{p.detail}</span></div>
+            ))}
+          </div>
+        </div>
+
+        <div class="card">
+          <h2 style="font-size:1.3rem">What interviews cover</h2>
+          <ul>{role.interviewTopics.map((t) => <li>{t}</li>)}</ul>
+          <h3>Career ladder</h3>
+          <ol class="ladder">{role.ladder.map((l) => <li><strong>{l.level}</strong><span class="muted">{l.focus}</span></li>)}</ol>
+        </div>
+      </div>
+
+      <aside class="stack sticky-side">
+        <div class="card">
+          <h3>Skill profile</h3>
+          <Fragment set:html={chart} />
+          <div class="legend"><span class="l-target">{role.title} target</span></div>
+        </div>
+        <div class="card">
+          <h3>Next steps</h3>
+          <div class="stack">
+            <button class="btn btn-primary" style="width:100%" type="button" id="set-target" data-slug={role.slug} data-href={u("roadmap")}><Icon name="target" size={18} /> Make this my target</button>
+            <a class="btn btn-secondary" style="width:100%" href={u(`compare?a=${role.slug}&b=${role.related[0]}`)}>Compare with {ROLE_BY_SLUG[role.related[0]].title}</a>
+          </div>
+          <h4 style="margin-top:20px" class="muted small">Related roles</h4>
+          <ul class="chips">{role.related.map((r) => <li><a class="chip" href={u(`roles/${r}`)}>{ROLE_BY_SLUG[r].title}</a></li>)}</ul>
+        </div>
+        <p class="muted small">Pay source: <a href={role.bls.url} rel="noopener">BLS Occupational Outlook Handbook</a>, {role.bls.occupation}, May 2025 median annual wage{role.bls.exact ? "" : ". BLS doesn't track this exact title, so treat it as a rough reference"}. Pay varies widely by location, industry and level.</p>
+      </aside>
+    </div>
+  </section>
+</Base>
+
+<script>
+  import { ROLE_BY_SLUG } from "../../data/roles.ts";
+  import { load, save } from "../../lib/state.ts";
+  import { readiness } from "../../lib/scoring.ts";
+
+  const btn = document.getElementById("set-target") as HTMLButtonElement;
+  const role = ROLE_BY_SLUG[btn.dataset.slug!];
+  const skills = load().skills;
+  if (skills && Object.keys(skills).length) {
+    const fact = document.getElementById("my-readiness")!;
+    fact.querySelector("[data-ready]")!.textContent = `${readiness(skills, role)}%`;
+    fact.querySelector("[data-ready-note]")!.textContent = "of this role's expected skill level";
+  }
+  btn.addEventListener("click", () => {
+    save({ target: role.slug });
+    location.href = btn.dataset.href!;
+  });
+</script>

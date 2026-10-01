@@ -1,0 +1,17 @@
+---
+import Base from "../layouts/Base.astro";
+import { u } from "../lib/url.ts";
+---
+<Base title="Page not found">
+  <section class="section">
+    <div class="container card empty" style="max-width:640px">
+      <p class="eyebrow">404</p>
+      <h1 style="font-size:2rem">This page doesn't exist</h1>
+      <p class="muted">It may have moved in the 2026 redesign. Pages from the original site are kept in the <a href={u("archive/")}>archive</a>.</p>
+      <div class="row" style="justify-content:center">
+        <a class="btn btn-primary" href={u()}>Go to the homepage</a>
+        <a class="btn btn-secondary" href={u("quiz")}>Take the career quiz</a>
+      </div>
+    </div>
+  </section>
+</Base>

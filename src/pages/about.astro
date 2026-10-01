@@ -1,0 +1,47 @@
+---
+import Base from "../layouts/Base.astro";
+import { DIMENSIONS, ROLES } from "../data/roles.ts";
+import { SKILLS } from "../data/skills.ts";
+import { u } from "../lib/url.ts";
+---
+<Base title="About & methodology" description="Why Data Career Navigator exists, how the matching works, where the data comes from and what it can't tell you.">
+  <section class="page-head">
+    <div class="container" style="max-width:820px">
+      <p class="eyebrow">About</p>
+      <h1>About this site</h1>
+      <p class="lead">Data Career Navigator is a free guide for students and career-switchers trying to figure out which data career suits them, and what to learn to get there.</p>
+    </div>
+  </section>
+
+  <section class="section-tight">
+    <div class="container stack" style="max-width:820px">
+      <div class="card">
+        <h2 style="font-size:1.3rem">Why it exists</h2>
+        <p>"Data" covers very different jobs. A BI analyst, a data engineer and an AI engineer use different tools, work with different people and are hired for different skills. Job titles also vary between companies. This site explains the differences plainly, helps you see which direction fits how you like to work, and turns that into a concrete learning plan.</p>
+        <p style="margin:0">It was first built in 2024 and rebuilt in 2026 with interactive tools and expanded content. The <a href={u("archive/")}>original version</a> is still available.</p>
+      </div>
+
+      <div class="card">
+        <h2 style="font-size:1.3rem">How the matching works</h2>
+        <p><strong>Interest fit.</strong> Each quiz answer adds points to {DIMENSIONS.length} interest dimensions: {DIMENSIONS.map((d) => d.label.toLowerCase()).join(", ")}. Each of the {ROLES.length} roles has a profile on the same dimensions. The fit score (0–100) is the cosine similarity between your profile and the role's, which measures how similar the <em>shape</em> of your interests is, not how many points you scored.</p>
+        <p><strong>Readiness.</strong> Each role has a target level (0–4) on the {SKILLS.length} skills it needs, describing a solid early-career hire. Readiness is the share of that target you already meet, with the role's core skills weighted more heavily. Being above target on one skill doesn't make up for a gap on another.</p>
+        <p style="margin:0"><strong>Roadmap.</strong> Gaps are ordered by size and importance. Each step is the next level-up action for that skill, with free resources listed first.</p>
+      </div>
+
+      <div class="card">
+        <h2 style="font-size:1.3rem">Sources and limits</h2>
+        <ul>
+          <li><strong>Pay and growth</strong> come from the U.S. Bureau of Labor Statistics Occupational Outlook Handbook (May 2025 median annual wages; 2025–2035 projections). BLS has no dedicated category for several titles here, so those role pages show the closest BLS occupation and say so. Real pay varies a lot by location, industry, company and level.</li>
+          <li><strong>Role descriptions and skill targets</strong> are editorial judgments based on typical job postings and career paths, not a survey. Expect individual employers to differ.</li>
+          <li><strong>The quiz is a starting point,</strong> not a psychometric test. Use it to decide what to explore next, not to rule careers out.</li>
+          <li style="margin-bottom:0"><strong>Privacy:</strong> there are no accounts and no tracking. Quiz answers, ratings and checklist progress are stored only in your own browser. Shared result links contain your answers in the URL, so share them only if you're comfortable with that.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h2 style="font-size:1.3rem">Who built it</h2>
+        <p style="margin:0">Built by Max Jiang. The code is on <a href="https://github.com/Maxj0201/Datacareernavigator" rel="noopener">GitHub</a>, where you can report broken links or suggest improvements by opening an issue.</p>
+      </div>
+    </div>
+  </section>
+</Base>

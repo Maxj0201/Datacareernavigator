@@ -1,0 +1,117 @@
+---
+import Base from "../layouts/Base.astro";
+import { SKILLS, LEVEL_NAMES, type SkillCategory } from "../data/skills.ts";
+import { ROLES } from "../data/roles.ts";
+import { u } from "../lib/url.ts";
+
+const categories = [...new Set(SKILLS.map((s) => s.category))] as SkillCategory[];
+---
+<Base title="Skill check" description={`Rate yourself on ${SKILLS.length} core data skills and instantly see your readiness for ${ROLES.length} data roles.`}>
+  <section class="page-head">
+    <div class="container">
+      <p class="eyebrow">Skill check</p>
+      <h1>Where are your skills today?</h1>
+      <p class="lead">Rate each skill honestly from 0 to 4. Each level is described, so you can pick the sentence that sounds most like you. Your readiness for every role updates as you go.</p>
+    </div>
+  </section>
+
+  <section class="section-tight">
+    <div class="container split" id="skills-app" data-results={u("results")} data-roadmap={u("roadmap")}>
+      <div>
+        {categories.map((cat) => (
+          <>
+            <h2 class="category-title">{cat}</h2>
+            <div class="stack">
+              {SKILLS.filter((s) => s.category === cat).map((s) => (
+                <div class="card card-flat skill-item" data-skill={s.id}>
+                  <div class="skill-head">
+                    <h3 style="margin:0">{s.name}</h3>
+                    <span class="badge badge-accent" data-badge>Not rated</span>
+                  </div>
+                  <p class="muted small" style="margin:4px 0 0">{s.description}</p>
+                  <div class="scale" role="group" aria-label={`${s.name} level`}>
+                    {LEVEL_NAMES.map((name, lvl) => (
+                      <button type="button" data-level={lvl} aria-pressed="false" title={s.levels[lvl]}>{lvl} · {name}</button>
+                    ))}
+                  </div>
+                  <p class="level-desc" data-desc aria-live="polite">Choose a level to see what it means.</p>
+                </div>
+              ))}
+            </div>
+          </>
+        ))}
+      </div>
+
+      <aside class="sticky-side">
+        <div class="card">
+          <div class="row" style="justify-content:space-between">
+            <h3 style="margin:0">Readiness by role</h3>
+            <span class="muted small" id="rated-count">0 / {SKILLS.length} rated</span>
+          </div>
+          <p class="muted small">How much of each role's expected skill level you already have.</p>
+          <div class="stack" id="readiness" style="margin-top:14px">
+            {ROLES.map((r) => (
+              <div class="meter-row" data-role={r.slug}>
+                <span>{r.title.replace("Business Intelligence", "BI")}</span>
+                <div class="meter"><span style="width:0%"></span></div>
+                <span class="num">0%</span>
+              </div>
+            ))}
+          </div>
+          <div class="stack" style="margin-top:22px">
+            <a class="btn btn-primary" style="width:100%" id="to-results" href={u("results")}>See my matches</a>
+            <a class="btn btn-secondary" style="width:100%" href={u("roadmap")}>Build my roadmap</a>
+            <button class="btn btn-ghost btn-sm" type="button" id="skills-reset">Clear my ratings</button>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </section>
+</Base>
+
+<script>
+  import { SKILLS, LEVEL_NAMES, type SkillId } from "../data/skills.ts";
+  import { ROLES } from "../data/roles.ts";
+  import { load, save } from "../lib/state.ts";
+  import { readiness, encodeSkills, encodeAnswers, type SkillRatings } from "../lib/scoring.ts";
+
+  const app = document.getElementById("skills-app")!;
+  let ratings: SkillRatings = { ...(load().skills ?? {}) };
+
+  function update() {
+    for (const s of SKILLS) {
+      const el = app.querySelector<HTMLElement>(`[data-skill="${s.id}"]`)!;
+      const lvl = ratings[s.id];
+      el.querySelectorAll<HTMLButtonElement>("[data-level]").forEach((b) =>
+        b.setAttribute("aria-pressed", String(Number(b.dataset.level) === lvl)));
+      el.querySelector("[data-badge]")!.textContent = lvl == null ? "Not rated" : `${lvl} · ${LEVEL_NAMES[lvl]}`;
+      el.querySelector("[data-desc]")!.textContent = lvl == null ? "Choose a level to see what it means." : s.levels[lvl];
+    }
+    for (const r of ROLES) {
+      const row = app.querySelector<HTMLElement>(`[data-role="${r.slug}"]`)!;
+      const pct = readiness(ratings, r);
+      (row.querySelector(".meter > span") as HTMLElement).style.width = `${pct}%`;
+      row.querySelector(".num")!.textContent = `${pct}%`;
+    }
+    const rated = Object.keys(ratings).length;
+    document.getElementById("rated-count")!.textContent = `${rated} / ${SKILLS.length} rated`;
+    const answers = load().answers;
+    const q = answers && answers.some((a) => a != null) ? `q=${encodeAnswers(answers)}&` : "";
+    (document.getElementById("to-results") as HTMLAnchorElement).href = `${app.dataset.results}?${q}s=${encodeSkills(ratings)}`;
+  }
+
+  app.addEventListener("click", (e) => {
+    const btn = (e.target as HTMLElement).closest<HTMLButtonElement>("[data-level]");
+    if (!btn) return;
+    const id = btn.closest<HTMLElement>("[data-skill]")!.dataset.skill as SkillId;
+    ratings[id] = Number(btn.dataset.level);
+    save({ skills: ratings });
+    update();
+  });
+  document.getElementById("skills-reset")!.addEventListener("click", () => {
+    ratings = {};
+    save({ skills: ratings });
+    update();
+  });
+  update();
+</script>
