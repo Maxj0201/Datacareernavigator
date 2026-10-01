@@ -54,3 +54,7 @@ Every push to `main` is tested, built and deployed to GitHub Pages by `.github/w
 ## Data sources
 
 Pay and growth figures come from the U.S. Bureau of Labor Statistics [Occupational Outlook Handbook](https://www.bls.gov/ooh/) (May 2025 medians, 2025–2035 projections). Where BLS has no category for a title, the closest occupation is shown and labelled as such.
+
+## License
+
+Code is released under the [MIT License](LICENSE). Linked third-party resources belong to their respective owners.
