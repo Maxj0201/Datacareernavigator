@@ -69,13 +69,3 @@ export const RESOURCES: Resource[] = [
 ];
 
 export const RESOURCE_BY_ID = Object.fromEntries(RESOURCES.map((r) => [r.id, r])) as Record<string, Resource>;
-
-/** Company career pages from the original site, kept as plain text links. */
-export const COMPANY_CAREERS = [
-  { name: "Microsoft", url: "https://careers.microsoft.com/" },
-  { name: "NVIDIA", url: "https://www.nvidia.com/en-us/about-nvidia/careers/" },
-  { name: "Google", url: "https://www.google.com/about/careers/applications/" },
-  { name: "Meta", url: "https://www.metacareers.com/" },
-  { name: "Oracle", url: "https://www.oracle.com/careers/" },
-  { name: "Airbnb", url: "https://careers.airbnb.com/" },
-];

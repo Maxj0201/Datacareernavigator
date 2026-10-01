@@ -96,3 +96,23 @@ test("share codes round-trip and reject garbage", () => {
   assert.deepEqual(decodeSkills(encodeSkills(skills)), skills);
   assert.equal(decodeSkills("5".repeat(SKILLS.length)), null);
 });
+
+import { BOARDS, ROLE_KEYWORDS, COMPANIES } from "../src/data/jobs.ts";
+
+test("job search builders encode role, location and level", () => {
+  for (const slug of ROLES.map((r) => r.slug)) assert.ok(ROLE_KEYWORDS[slug], `no job keyword for ${slug}`);
+  for (const b of BOARDS) {
+    assert.ok(b.home.startsWith("https://"));
+    if (!b.search) continue;
+    const url = b.search("data analyst", "New York, NY", "entry");
+    assert.ok(url.startsWith("https://"), `${b.name}: ${url}`);
+    assert.ok(/data(%20|\+)analyst/.test(url), `${b.name} drops the keyword: ${url}`);
+    assert.ok(!url.includes(" "), `${b.name} has unencoded spaces`);
+  }
+  const li = BOARDS.find((b) => b.name === "LinkedIn Jobs")!.search!("x", "", "intern");
+  assert.ok(li.includes("f_E=1"), "LinkedIn internship filter");
+  for (const c of COMPANIES) {
+    assert.ok(c.careers.startsWith("https://"));
+    if (c.students) assert.ok(c.students.startsWith("https://"));
+  }
+});

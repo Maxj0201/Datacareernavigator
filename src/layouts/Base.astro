@@ -11,12 +11,13 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
 const path = Astro.url.pathname.replace(/\/$/, "");
 
 const NAV = [
-  { href: "quiz", label: "Career quiz" },
+  { href: "quiz", label: "Quiz" },
   { href: "skills", label: "Skill check" },
   { href: "roles", label: "Roles" },
   { href: "compare", label: "Compare" },
   { href: "roadmap", label: "Roadmap" },
   { href: "resources", label: "Resources" },
+  { href: "jobs", label: "Jobs" },
   { href: "about", label: "About" },
 ];
 const isCurrent = (href: string) => path === u(href) || path.startsWith(u(href) + "/");
@@ -89,6 +90,7 @@ const isCurrent = (href: string) => path === u(href) || path.startsWith(u(href) 
           <h4>Site</h4>
           <ul class="stack">
             <li><a href={u("roles")}>All roles</a></li>
+            <li><a href={u("jobs")}>Job search hub</a></li>
             <li><a href={u("resources")}>Resources</a></li>
             <li><a href={u("about")}>About & methodology</a></li>
             <li><a href={u("archive/")}>Original 2024 site</a></li>

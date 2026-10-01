@@ -4,90 +4,193 @@ import Icon from "../components/Icon.astro";
 import { ROLES } from "../data/roles.ts";
 import { SKILLS } from "../data/skills.ts";
 import { RESOURCES } from "../data/resources.ts";
+import { COMPANIES } from "../data/jobs.ts";
 import { QUIZ } from "../data/quiz.ts";
 import { u } from "../lib/url.ts";
-import { radarSvg } from "../lib/radar.ts";
 
-const sample = ROLES.find((r) => r.slug === "data-analyst")!;
-const axes = SKILLS.slice(0, 8);
-const preview = radarSvg(
-  axes.map((s) => s.short),
-  [
-    { label: "Data Analyst target", values: axes.map((s) => sample.skills[s.id] ?? 0), className: "radar-target" },
-    { label: "Example learner", values: [2, 3, 1, 2, 2, 1, 1, 0], className: "radar-you" },
-  ],
-);
+// Friendly phrasing for the hero "try it" panel; each maps to a quiz dimension.
+const LIKES = [
+  { dim: "analyze", text: "Finding answers in data" },
+  { dim: "visualize", text: "Making charts & dashboards" },
+  { dim: "communicate", text: "Explaining insights to people" },
+  { dim: "product", text: "Shaping products people use" },
+  { dim: "statistics", text: "Statistics & experiments" },
+  { dim: "ml", text: "Machine learning & AI" },
+  { dim: "engineering", text: "Building data pipelines" },
+  { dim: "software", text: "Writing real software" },
+];
 
-const tools = [
-  { icon: "compass", title: "Career quiz", text: `${QUIZ.length} questions about what you enjoy. Get your best-fit roles, with the reasons.`, href: "quiz" },
-  { icon: "gauge", title: "Skill check", text: `Rate yourself on ${SKILLS.length} core skills and see your readiness for every role.`, href: "skills" },
-  { icon: "map", title: "Personal roadmap", text: "A step-by-step checklist built from your skill gaps. Progress saves automatically.", href: "roadmap" },
-  { icon: "scale", title: "Compare roles", text: "Put two roles side by side: skills, tools, pay and how people get in.", href: "compare" },
-  { icon: "spark", title: "Knowledge check", text: "Ten quick concept questions with explanations to test the basics.", href: "knowledge-check" },
-  { icon: "book", title: "Resource library", text: `${RESOURCES.length} curated courses, books and practice sites, filterable by skill and cost.`, href: "resources" },
+const JOURNEY = [
+  { id: "discover", icon: "compass", title: "Discover", text: "Find roles that fit how you like to work.", links: [{ label: "Career quiz", href: "quiz" }, { label: "Browse roles", href: "roles" }] },
+  { id: "assess", icon: "gauge", title: "Assess", text: "See how close your skills are to each role.", links: [{ label: "Skill check", href: "skills" }, { label: "Knowledge check", href: "knowledge-check" }] },
+  { id: "learn", icon: "map", title: "Learn", text: "Follow a step-by-step plan for your gaps.", links: [{ label: "My roadmap", href: "roadmap" }, { label: "Resources", href: "resources" }] },
+  { id: "build", icon: "layers", title: "Build", text: "Create portfolio projects employers look for.", links: [{ label: "Project ideas", href: "roles" }] },
+  { id: "apply", icon: "briefcase", title: "Apply", text: "Search jobs and prepare for interviews.", links: [{ label: "Job search hub", href: "jobs" }, { label: "Compare roles", href: "compare" }] },
 ] as const;
+
+const PATHS = [
+  {
+    id: "explore", label: "I'm curious about data careers",
+    intro: "Start broad, then narrow down. No experience needed.",
+    steps: [
+      { text: "Skim the eight roles to see what each one actually does.", href: "roles", cta: "Browse roles" },
+      { text: `Take the ${QUIZ.length}-question career quiz to see which ones fit you.`, href: "quiz", cta: "Take the quiz" },
+      { text: "Compare your top two matches side by side.", href: "compare", cta: "Compare" },
+      { text: "Rate your skills to see how far you are from each.", href: "skills", cta: "Skill check" },
+    ],
+  },
+  {
+    id: "target", label: "I know which role I want",
+    intro: "Skip the exploring and turn your goal into a plan.",
+    steps: [
+      { text: "Read your role's page: daily work, tools and how people get in.", href: "roles", cta: "Find my role" },
+      { text: "Rate your skills to measure your readiness.", href: "skills", cta: "Skill check" },
+      { text: "Set the role as your target and get a step-by-step roadmap.", href: "roadmap", cta: "Build roadmap" },
+      { text: "Pick a portfolio project from the role page and start building.", href: "roles", cta: "Project ideas" },
+    ],
+  },
+  {
+    id: "learn", label: "I'm building my skills",
+    intro: "Find your gaps and learn the next thing that matters.",
+    steps: [
+      { text: "Test your fundamentals with the 10-question knowledge check.", href: "knowledge-check", cta: "Knowledge check" },
+      { text: "Rate yourself on all 15 skills.", href: "skills", cta: "Skill check" },
+      { text: "Follow your roadmap and tick steps off as you go.", href: "roadmap", cta: "My roadmap" },
+      { text: "Filter the resource library by skill. Free options come first.", href: "resources", cta: "Resources" },
+    ],
+  },
+  {
+    id: "apply", label: "I'm applying for jobs now",
+    intro: "Go straight to openings and prepare for interviews.",
+    steps: [
+      { text: "Review what interviews cover for your role.", href: "roles", cta: "Interview topics" },
+      { text: "Build prefilled searches on LinkedIn, Indeed and more.", href: "jobs", cta: "Job search hub" },
+      { text: `Visit career pages and student programs of ${COMPANIES.length} top employers.`, href: "jobs", cta: "Company pages" },
+      { text: "Check typical pay before you negotiate.", href: "jobs", cta: "Pay research" },
+    ],
+  },
+];
+
+const TOOLS = [
+  { icon: "compass", title: "Career quiz", text: `${QUIZ.length} questions on what you enjoy, matched to ${ROLES.length} roles.`, href: "quiz" },
+  { icon: "gauge", title: "Skill check", text: `Rate ${SKILLS.length} skills and see your readiness for every role.`, href: "skills" },
+  { icon: "map", title: "Personal roadmap", text: "A checklist built from your skill gaps that saves your progress.", href: "roadmap" },
+  { icon: "scale", title: "Compare roles", text: "Two roles side by side: skills, tools, pay and entry paths.", href: "compare" },
+  { icon: "book", title: "Role guides", text: "Daily work, projects, interview topics and pay for each role.", href: "roles" },
+  { icon: "spark", title: "Knowledge check", text: "Ten concept questions with explanations.", href: "knowledge-check" },
+  { icon: "layers", title: "Resource library", text: `${RESOURCES.length} curated courses, books and practice sites.`, href: "resources" },
+  { icon: "briefcase", title: "Job search hub", text: "Prefilled job searches and top company career pages.", href: "jobs" },
+] as const;
+
+const FAQ = [
+  { q: "Is it free? Do I need an account?", a: "Yes, it's completely free, and there are no accounts or sign-ups." },
+  { q: "Do I need experience in data first?", a: "No. The quiz asks what you enjoy, not what you know. The skill check and roadmap meet you wherever you're starting." },
+  { q: "Where are my answers saved?", a: "Only in your own browser. Nothing is sent to a server, so clearing your browser data resets your progress." },
+  { q: "How accurate are the matches?", a: "They're a starting point for exploring, not a verdict. The About page explains exactly how the scoring works and its limits." },
+  { q: "Where do the pay figures come from?", a: "From the U.S. Bureau of Labor Statistics (May 2025). When BLS has no category for a title, the closest one is shown and labelled." },
+];
 ---
 <Base>
-  <section class="hero">
+  <section class="hero hero-glow">
     <div class="container hero-grid">
       <div>
-        <p class="eyebrow">Free · No sign-up · About 5 minutes</p>
-        <h1>Find the data career that fits you.</h1>
-        <p class="lead">Analyst, data engineer, data scientist, AI engineer? Discover which role suits how you like to work, see how close your skills already are, and get a concrete plan for what to learn next.</p>
+        <p class="eyebrow">A free guide to careers in data</p>
+        <h1>Find your place in data.</h1>
+        <p class="lead">Data jobs range from building dashboards to training AI models. This site helps you work out which role suits you, measure the gap from where you are, and plan the path there, all in one place.</p>
         <div class="row">
-          <a class="btn btn-primary" href={u("quiz")}>Take the career quiz <Icon name="arrow" size={18} /></a>
-          <a class="btn btn-secondary" href={u("roles")}>Browse the roles</a>
+          <a class="btn btn-primary" href="#start">Show me where to start <span aria-hidden="true">↓</span></a>
+          <a class="btn btn-secondary" href={u("roles")}>Explore the {ROLES.length} roles</a>
         </div>
+        <ul class="hero-facts">
+          <li><Icon name="check" size={16} /> No sign-up</li>
+          <li><Icon name="check" size={16} /> Takes 5 minutes</li>
+          <li><Icon name="check" size={16} /> Nothing leaves your browser</li>
+        </ul>
       </div>
-      <div class="hero-panel card">
-        <div class="row" style="justify-content:space-between;margin-bottom:6px">
-          <strong>Example: skills vs. Data Analyst</strong>
-          <span class="badge badge-accent">Preview</span>
+
+      <div class="card try-panel" id="try" data-roles-base={u("roles/")}>
+        <div class="row" style="justify-content:space-between">
+          <strong>Try it: what sounds fun?</strong>
+          <span class="badge badge-accent">10-second preview</span>
         </div>
-        <Fragment set:html={preview} />
-        <div class="legend"><span class="l-you">Your ratings</span><span class="l-target">Role target</span></div>
+        <p class="muted small" style="margin:4px 0 12px">Tap a few. Roles re-rank as you go.</p>
+        <div class="like-chips" role="group" aria-label="Things you enjoy">
+          {LIKES.map((l) => <button type="button" class="like" data-dim={l.dim} aria-pressed="false">{l.text}</button>)}
+        </div>
+        <div class="try-results" aria-live="polite">
+          <p class="muted small try-empty" id="try-empty">Your best-fit roles will appear here.</p>
+          <ol class="try-list" id="try-list"></ol>
+        </div>
+        <a class="btn btn-primary" style="width:100%;margin-top:6px" href={u("quiz")}>Get a full match with the quiz →</a>
       </div>
     </div>
   </section>
 
-  <section class="section-tight">
+  <section class="section-tight" id="welcome-back" hidden>
     <div class="container">
-      <div class="stat-strip">
-        <div class="stat"><b>{ROLES.length}</b><span class="muted">data roles explained</span></div>
-        <div class="stat"><b>{SKILLS.length}</b><span class="muted">skills mapped to each role</span></div>
-        <div class="stat"><b>{RESOURCES.length}</b><span class="muted">curated learning resources</span></div>
-        <div class="stat"><b>0</b><span class="muted">accounts or data collected</span></div>
+      <div class="card welcome">
+        <div>
+          <p class="eyebrow" style="margin-bottom:4px">Welcome back</p>
+          <h2 style="font-size:1.3rem;margin:0" id="wb-title">Pick up where you left off</h2>
+          <p class="muted small" style="margin:6px 0 0" id="wb-status"></p>
+        </div>
+        <a class="btn btn-primary" id="wb-next" href={u("quiz")}>Continue →</a>
       </div>
+    </div>
+  </section>
+
+  <section class="section" id="start">
+    <div class="container">
+      <p class="eyebrow">Start here</p>
+      <h2>Where are you starting from?</h2>
+      <p class="muted" style="max-width:60ch">Pick the option closest to you for a short, guided route through the site.</p>
+      <div class="path-tabs" role="tablist" aria-label="Your situation">
+        {PATHS.map((p, i) => (
+          <button type="button" role="tab" id={`tab-${p.id}`} aria-controls={`panel-${p.id}`} aria-selected={i === 0 ? "true" : "false"} tabindex={i === 0 ? 0 : -1}>{p.label}</button>
+        ))}
+      </div>
+      {PATHS.map((p, i) => (
+        <div class="card path-panel" role="tabpanel" id={`panel-${p.id}`} aria-labelledby={`tab-${p.id}`} hidden={i !== 0}>
+          <p class="muted" style="margin-bottom:18px">{p.intro}</p>
+          <ol class="path-steps">
+            {p.steps.map((s, k) => (
+              <li>
+                <span class="step-num">{k + 1}</span>
+                <span class="path-text">{s.text}</span>
+                <a class={`btn btn-sm ${k === 0 ? "btn-primary" : "btn-secondary"}`} href={u(s.href)}>{s.cta}</a>
+              </li>
+            ))}
+          </ol>
+        </div>
+      ))}
     </div>
   </section>
 
   <section class="section">
-    <div class="container split">
-      <div>
-        <p class="eyebrow">How it works</p>
-        <h2>From "I like data" to a plan you can follow</h2>
-        <div class="steps" style="margin-top:24px">
-          <div class="step"><span class="step-num">1</span><div><h3>Discover</h3><p class="muted">The career quiz scores your interests across eight dimensions, from investigating data to building software, and matches them to each role.</p></div></div>
-          <div class="step"><span class="step-num">2</span><div><h3>Assess</h3><p class="muted">The skill check compares your self-ratings with what each role expects of a solid early-career hire.</p></div></div>
-          <div class="step"><span class="step-num">3</span><div><h3>Plan</h3><p class="muted">Your roadmap lists the next concrete step for each gap, with free resources first. Tick items off as you go.</p></div></div>
-        </div>
-      </div>
-      <div class="card">
-        <h3>Not sure where to start?</h3>
-        <p class="muted">Most people begin with the quiz. If you already have a target role, jump straight to the skill check.</p>
-        <div class="stack">
-          <a class="btn btn-primary" style="width:100%" href={u("quiz")}>Start with the quiz</a>
-          <a class="btn btn-secondary" style="width:100%" href={u("skills")}>I know my target: check my skills</a>
-        </div>
-      </div>
+    <div class="container">
+      <p class="eyebrow">How it fits together</p>
+      <h2>Your journey, step by step</h2>
+      <p class="muted" style="max-width:60ch">Every tool on this site covers one stage. Your progress is tracked in this browser, so you can stop and come back any time.</p>
+      <ol class="journey" id="journey">
+        {JOURNEY.map((j, i) => (
+          <li class="journey-step" data-step={j.id}>
+            <div class="journey-head">
+              <span class="journey-icon"><Icon name={j.icon} /></span>
+              <span class="journey-status" data-status></span>
+            </div>
+            <h3><span class="muted">{i + 1}.</span> {j.title}</h3>
+            <p class="muted small">{j.text}</p>
+            <div class="row" style="gap:6px">{j.links.map((l) => <a class="chip chip-link" href={u(l.href)}>{l.label}</a>)}</div>
+          </li>
+        ))}
+      </ol>
     </div>
   </section>
 
   <section class="section">
     <div class="container">
-      <p class="eyebrow">Explore</p>
       <div class="row" style="justify-content:space-between;align-items:end;margin-bottom:20px">
-        <h2 style="margin:0">Eight data roles, explained</h2>
+        <div><p class="eyebrow">Explore</p><h2 style="margin:0">Eight data roles, explained</h2></div>
         <a href={u("roles")}>See all roles →</a>
       </div>
       <div class="grid grid-4">
@@ -104,16 +207,144 @@ const tools = [
   <section class="section">
     <div class="container">
       <p class="eyebrow">Toolkit</p>
-      <h2>Interactive tools</h2>
-      <div class="grid grid-3" style="margin-top:20px">
-        {tools.map((t) => (
+      <h2>Everything on this site</h2>
+      <div class="grid grid-4" style="margin-top:20px">
+        {TOOLS.map((t) => (
           <a class="card card-link" href={u(t.href)}>
             <div class="icon-tile"><Icon name={t.icon} /></div>
             <h3>{t.title}</h3>
-            <p class="muted">{t.text}</p>
+            <p class="muted small">{t.text}</p>
           </a>
         ))}
       </div>
     </div>
   </section>
+
+  <section class="section">
+    <div class="container split">
+      <div>
+        <p class="eyebrow">Questions</p>
+        <h2>Frequently asked</h2>
+        <div class="faq">
+          {FAQ.map((f) => (
+            <details><summary>{f.q}</summary><p class="muted">{f.a}</p></details>
+          ))}
+        </div>
+      </div>
+      <div class="card cta-card">
+        <h3 style="font-size:1.35rem">Ready when you are</h3>
+        <p class="muted">Most people start with the quiz. It takes about five minutes and you can change your answers any time.</p>
+        <div class="stack">
+          <a class="btn btn-primary" style="width:100%" href={u("quiz")}>Take the career quiz</a>
+          <a class="btn btn-secondary" style="width:100%" href={u("jobs")}>Go to the job search hub</a>
+        </div>
+      </div>
+    </div>
+  </section>
 </Base>
+
+<script>
+  import { ROLES, type Dimension } from "../data/roles.ts";
+  import { QUIZ } from "../data/quiz.ts";
+  import { SKILLS } from "../data/skills.ts";
+  import { interestFit, readiness, skillGaps, type InterestProfile } from "../lib/scoring.ts";
+  import { load } from "../lib/state.ts";
+
+  // ---- "Try it" live preview ------------------------------------------------
+  const tryPanel = document.getElementById("try")!;
+  const rolesBase = tryPanel.dataset.rolesBase!;
+  const list = document.getElementById("try-list")!;
+  const empty = document.getElementById("try-empty")!;
+  const chosen = new Set<Dimension>();
+
+  function renderTry() {
+    if (chosen.size === 0) {
+      list.innerHTML = "";
+      empty.hidden = false;
+      return;
+    }
+    empty.hidden = true;
+    const profile = Object.fromEntries(
+      ["analyze", "visualize", "communicate", "product", "statistics", "ml", "engineering", "software"].map((d) => [d, chosen.has(d as Dimension) ? 3 : 0]),
+    ) as InterestProfile;
+    const top = ROLES.map((r) => ({ r, fit: interestFit(profile, r) }))
+      .sort((a, b) => b.fit - a.fit)
+      .slice(0, 3);
+    list.innerHTML = top.map(({ r, fit }) => `
+      <li><a href="${rolesBase}${r.slug}">
+        <span class="try-name">${r.title}</span>
+        <span class="meter"><span style="width:${fit}%"></span></span>
+        <span class="try-num">${fit}</span>
+      </a></li>`).join("");
+  }
+  tryPanel.addEventListener("click", (e) => {
+    const b = (e.target as HTMLElement).closest<HTMLButtonElement>(".like");
+    if (!b) return;
+    const d = b.dataset.dim as Dimension;
+    if (chosen.has(d)) chosen.delete(d); else chosen.add(d);
+    b.setAttribute("aria-pressed", String(chosen.has(d)));
+    renderTry();
+  });
+
+  // ---- Path chooser tabs (WAI-ARIA tabs pattern) ----------------------------
+  const tabs = [...document.querySelectorAll<HTMLButtonElement>('.path-tabs [role="tab"]')];
+  function select(tab: HTMLButtonElement, focus = false) {
+    for (const t of tabs) {
+      const on = t === tab;
+      t.setAttribute("aria-selected", String(on));
+      t.tabIndex = on ? 0 : -1;
+      document.getElementById(t.getAttribute("aria-controls")!)!.hidden = !on;
+    }
+    if (focus) tab.focus();
+  }
+  tabs.forEach((t, i) => {
+    t.addEventListener("click", () => select(t));
+    t.addEventListener("keydown", (e) => {
+      const next = e.key === "ArrowRight" ? 1 : e.key === "ArrowLeft" ? -1 : 0;
+      if (next) { e.preventDefault(); select(tabs[(i + next + tabs.length) % tabs.length], true); }
+    });
+  });
+
+  // ---- Journey progress + welcome back -------------------------------------
+  const state = load();
+  const answered = (state.answers ?? []).filter((a) => a != null).length;
+  const quizDone = answered === QUIZ.length;
+  const rated = Object.keys(state.skills ?? {}).length;
+  const target = state.target ? ROLES.find((r) => r.slug === state.target) : undefined;
+  let roadmapPct: number | null = null;
+  if (target) {
+    const gaps = skillGaps(state.skills ?? {}, target);
+    const items = gaps.flatMap((g) => Array.from({ length: g.target - g.current }, (_, k) => `${g.skill}-${g.current + k}`));
+    roadmapPct = items.length ? Math.round((items.filter((id) => state.checklist?.[id]).length / items.length) * 100) : 100;
+  }
+
+  const status: Record<string, [string, string] | null> = {
+    discover: quizDone ? ["Done", "badge-good"] : answered ? [`${answered}/${QUIZ.length}`, "badge-warn"] : null,
+    assess: rated >= SKILLS.length ? ["Done", "badge-good"] : rated ? [`${rated}/${SKILLS.length} rated`, "badge-warn"] : null,
+    learn: roadmapPct != null ? [roadmapPct === 100 ? "Done" : `${roadmapPct}%`, roadmapPct === 100 ? "badge-good" : "badge-warn"] : null,
+    build: null,
+    apply: null,
+  };
+  for (const [step, s] of Object.entries(status)) {
+    const el = document.querySelector<HTMLElement>(`[data-step="${step}"] [data-status]`)!;
+    if (s) { el.textContent = s[0]; el.className = `badge ${s[1]} journey-status`; }
+  }
+
+  if (answered || rated || target) {
+    const base = rolesBase.replace(/roles\/$/, "");
+    const parts: string[] = [];
+    if (answered) parts.push(quizDone ? "Career quiz complete" : `Quiz ${answered}/${QUIZ.length} answered`);
+    if (rated) parts.push(`${rated}/${SKILLS.length} skills rated`);
+    if (target) parts.push(`Target: ${target.title}${state.skills ? ` (${readiness(state.skills, target)}% ready)` : ""}`);
+    const next = !quizDone ? ["Continue the quiz", "quiz"]
+      : rated < SKILLS.length ? ["Finish the skill check", "skills"]
+      : !target ? ["See your matches", "results"]
+      : (roadmapPct ?? 0) < 100 ? ["Continue your roadmap", "roadmap"]
+      : ["Search for jobs", "jobs"];
+    document.getElementById("wb-status")!.textContent = parts.join(" · ");
+    const btn = document.getElementById("wb-next") as HTMLAnchorElement;
+    btn.textContent = `${next[0]} →`;
+    btn.href = base + next[1];
+    document.getElementById("welcome-back")!.hidden = false;
+  }
+</script>

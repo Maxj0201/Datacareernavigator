@@ -1,0 +1,147 @@
+---
+import Base from "../layouts/Base.astro";
+import Icon from "../components/Icon.astro";
+import { COMPANIES, COMPANY_GROUPS, BOARDS, HELPFUL } from "../data/jobs.ts";
+import { ROLES } from "../data/roles.ts";
+import { u } from "../lib/url.ts";
+---
+<Base title="Job search hub" description="Go straight to the right place: prefilled job searches for every data role, career pages of top tech and data companies, student programs, and pay research.">
+  <section class="page-head">
+    <div class="container">
+      <p class="eyebrow">Job search hub</p>
+      <h1>Go straight to the right place</h1>
+      <p class="lead">Build a ready-made job search for your target role, jump to the career pages of top tech and data companies, and find student programs, pay data and places to meet people.</p>
+    </div>
+  </section>
+
+  <section class="section-tight">
+    <div class="container">
+      <div class="card" id="search-builder" data-roles-base={u("roles/")}>
+        <div class="row" style="gap:14px;align-items:center;margin-bottom:6px">
+          <div class="icon-tile" style="margin:0"><Icon name="briefcase" /></div>
+          <div>
+            <h2 style="font-size:1.3rem;margin:0">Job search builder</h2>
+            <p class="muted small" style="margin:0">Pick a role and location, then open a prefilled search on each site.</p>
+          </div>
+        </div>
+        <div class="filters" style="margin-top:18px">
+          <label>Role
+            <select id="jb-role">{ROLES.map((r) => <option value={r.slug}>{r.title}</option>)}</select>
+          </label>
+          <label>Location <input type="search" id="jb-loc" placeholder="City, state, or Remote" autocomplete="off" /></label>
+          <label>Experience
+            <select id="jb-level">
+              <option value="any">Any level</option>
+              <option value="entry">Entry level</option>
+              <option value="intern">Internship</option>
+            </select>
+          </label>
+        </div>
+        <div class="grid grid-3" id="jb-links">
+          {BOARDS.map((b) => (
+            <a class="card card-flat card-link" href={b.home} target="_blank" rel="noopener" data-board={b.name}>
+              <div class="row" style="justify-content:space-between"><strong>{b.name}</strong><span class="muted" aria-hidden="true">↗</span></div>
+              <p class="muted small" style="margin:4px 0 0">{b.note}</p>
+              <p class="small" style="margin:8px 0 0" data-hint>{b.search ? "" : "Opens the site (no prefilled search)"}</p>
+            </a>
+          ))}
+        </div>
+        <p class="muted small" style="margin:14px 0 0" id="jb-role-tip"></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-tight">
+    <div class="container">
+      <div class="row" style="justify-content:space-between;align-items:end;margin-bottom:16px">
+        <div>
+          <h2 style="margin:0">Company career pages</h2>
+          <p class="muted small" style="margin:6px 0 0">Large employers that hire across data roles. Student programs are linked where they exist.</p>
+        </div>
+        <label class="row" style="gap:8px;font-weight:600;font-size:0.9rem">Show
+          <select id="co-group"><option value="">All companies</option>{COMPANY_GROUPS.map((g) => <option>{g}</option>)}</select>
+        </label>
+      </div>
+      <div class="grid grid-4" id="co-list">
+        {COMPANIES.map((c) => (
+          <div class="card card-flat" data-group={c.group} style="padding:18px">
+            <span class="chip" style="font-size:0.72rem">{c.group}</span>
+            <h3 style="margin:10px 0 8px">{c.name}</h3>
+            <div class="row" style="gap:8px">
+              <a class="btn btn-secondary btn-sm" href={c.careers} target="_blank" rel="noopener">Careers ↗</a>
+              {c.students && <a class="btn btn-ghost btn-sm" href={c.students} target="_blank" rel="noopener">Students ↗</a>}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section-tight">
+    <div class="container grid grid-3">
+      {HELPFUL.map((g) => (
+        <div class="card">
+          <h2 style="font-size:1.2rem">{g.title}</h2>
+          <ul style="list-style:none;padding:0;margin:0" class="stack">
+            {g.items.map((d) => (
+              <li><a href={d.url} target="_blank" rel="noopener"><strong>{d.name}</strong> ↗</a><br /><span class="muted small">{d.note}</span></li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="section-tight">
+    <div class="container">
+      <div class="card">
+        <h2 style="font-size:1.2rem">Before you apply</h2>
+        <div class="grid grid-3" style="gap:16px;margin-top:8px">
+          <div><strong>Match the posting's language.</strong> <span class="muted">Mirror the tools and skills a posting lists, if you actually have them, so recruiters and screening systems see the fit.</span></div>
+          <div><strong>Lead with one strong project.</strong> <span class="muted">A finished, well-documented project beats a list of courses. Each <a href={u("roles")}>role page</a> suggests projects.</span></div>
+          <div><strong>Prepare for the interview format.</strong> <span class="muted">Role pages list what interviews cover; the <a href={u("resources")}>resource library</a> has practice sites.</span></div>
+        </div>
+      </div>
+      <p class="muted small" style="margin-top:16px">Links go to external sites that we don't control or endorse. Openings change daily.</p>
+    </div>
+  </section>
+</Base>
+
+<script>
+  import { BOARDS, ROLE_KEYWORDS, type Level } from "../data/jobs.ts";
+  import { ROLE_BY_SLUG } from "../data/roles.ts";
+  import { load } from "../lib/state.ts";
+
+  const role = document.getElementById("jb-role") as HTMLSelectElement;
+  const loc = document.getElementById("jb-loc") as HTMLInputElement;
+  const level = document.getElementById("jb-level") as HTMLSelectElement;
+  const builder = document.getElementById("search-builder")!;
+
+  const params = new URLSearchParams(location.search);
+  const preset = params.get("role") ?? load().target;
+  if (preset && ROLE_KEYWORDS[preset]) role.value = preset;
+
+  function update() {
+    const q = ROLE_KEYWORDS[role.value];
+    const where = loc.value.trim();
+    for (const b of BOARDS) {
+      const card = builder.querySelector<HTMLAnchorElement>(`[data-board="${b.name}"]`)!;
+      if (!b.search) continue;
+      card.href = b.search(q, where, level.value as Level);
+      const lvl = level.value === "intern" ? " · internships" : level.value === "entry" ? " · entry level" : "";
+      card.querySelector("[data-hint]")!.textContent = `Search: “${q}”${where ? ` in ${where}` : ""}${b.name === "USAJOBS" ? "" : lvl}`;
+    }
+    const r = ROLE_BY_SLUG[role.value];
+    const tip = document.getElementById("jb-role-tip")!;
+    tip.innerHTML = `Titles vary between companies. Before applying, read <a href="${builder.dataset.rolesBase}${r.slug}">what a ${r.title} does</a>, and also try related titles such as ${r.related.map((s) => ROLE_KEYWORDS[s]).join(", ")}.`;
+  }
+  [role, loc, level].forEach((el) => el.addEventListener("input", update));
+  update();
+
+  const group = document.getElementById("co-group") as HTMLSelectElement;
+  group.addEventListener("input", () => {
+    document.querySelectorAll<HTMLElement>("#co-list > [data-group]").forEach((c) => {
+      c.hidden = !!group.value && c.dataset.group !== group.value;
+    });
+  });
+</script>

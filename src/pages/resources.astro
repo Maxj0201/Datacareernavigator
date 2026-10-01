@@ -1,6 +1,7 @@
 ---
 import Base from "../layouts/Base.astro";
-import { RESOURCES, COMPANY_CAREERS } from "../data/resources.ts";
+import { RESOURCES } from "../data/resources.ts";
+import { u } from "../lib/url.ts";
 import { SKILLS } from "../data/skills.ts";
 
 const types = [...new Set(RESOURCES.map((r) => r.type))].sort();
@@ -47,9 +48,9 @@ const types = [...new Set(RESOURCES.map((r) => r.type))].sort();
       <p class="card empty" id="f-empty" hidden>No resources match these filters.</p>
 
       <div class="card" style="margin-top:32px">
-        <h2 style="font-size:1.2rem">Company career pages</h2>
-        <p class="muted small">Large employers that hire across data roles. Each company's own job site has the most current openings.</p>
-        <ul class="chips">{COMPANY_CAREERS.map((c) => <li><a class="chip" href={c.url} target="_blank" rel="noopener">{c.name} careers ↗</a></li>)}</ul>
+        <h2 style="font-size:1.2rem">Looking for job openings?</h2>
+        <p class="muted small" style="margin-bottom:12px">Prefilled job searches, company career pages and student programs are in the Job search hub.</p>
+        <a class="btn btn-secondary btn-sm" href={u("jobs")}>Open the Job search hub →</a>
       </div>
       <p class="muted small" style="margin-top:16px">Links go to third-party sites and aren't endorsements. Prices and availability can change.</p>
     </div>
